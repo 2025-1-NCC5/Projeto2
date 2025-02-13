@@ -8,9 +8,9 @@
 
 ## Nome do Grupo
 
-## Integrantes: <a href="https://www.linkedin.com/in/victorbarq/">Bruno Dourado</a>, <a href="https://www.linkedin.com/in/victorbarq/">Alexsander Sudario</a>, <a href="https://www.linkedin.com/in/victorbarq/">Felipe Martins</a>, <a href="https://www.linkedin.com/in/victorbarq/">João Vitor</a>, <a href="https://www.linkedin.com/in/victorbarq/">Vitor Tokunaga</a>
+## Integrantes: <a href="https://www.linkedin.com/in/bruno-costa-dourado-192b3b26a/">Bruno Dourado</a>, <a href="https://www.linkedin.com/in/alexsander-sudario-0a793524a/">Alexsander Sudario</a>, <a href="https://www.linkedin.com/in/ifelipemartins/">Felipe Martins</a>, <a href="https://www.linkedin.com/in/joao-vitor-leao-bonifacio-878833252/">João Vitor</a>, <a href="https://www.linkedin.com/in/vitor-tokunaga-82b344278/">Vitor Tokunaga</a>
 
-## Professores Orientadores: <a href="https://www.linkedin.com/in/victorbarq/">Renata Muniz</a>, <a href="https://www.linkedin.com/in/victorbarq/">Vinicius Heltai</a>, <a href="https://www.linkedin.com/in/victorbarq/">Rafael Rossetti</a>, <a href="https://www.linkedin.com/in/victorbarq/">Marcos Minoru</a>, <a href="https://www.linkedin.com/in/victorbarq/">Rodrigo da Rosa</a>
+## Professores Orientadores: <a href="https://www.linkedin.com/in/remuniz/">Renata Muniz</a>, <a href="">Vinicius Heltai</a>, <a href="https://www.linkedin.com/in/rafael-diogo-rossetti/">Rafael Rossetti</a>, <a href="https://www.linkedin.com/in/marcos-minoru-nakatsugawa/">Marcos Minoru</a>, <a href="https://www.linkedin.com/in/rodrigo-da-rosa-phd/">Rodrigo da Rosa</a>
 
 ## Descrição
 
