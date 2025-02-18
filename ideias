@@ -1,0 +1,41 @@
+
+Otimizar experiência do cliente que utiliza app de corrida
+Precisamos passar a credibilidade com IA
+
+Mostrar o preço em cada APP (Uber, 99, taxi etc)
+
+
+
+No Git:
+------------------------
+Nome da Empresa: VUCA - Vai Uma Corrida Ai? e "Volatilidade, Incerteza, Complexidade e Ambiguidade" 
+
+
+Cargos
+Product Owner: Bruno Dourado
+Scrum Master: Vitor Tokunaga
+
+
+UML do sistema: 
+Diagrama de Componentes: Foca na estrutura de componentes do sistema e como eles interagem. Usado para mostrar a arquitetura do sistema.
+
+Signo: V e U, que anima e vira C e A, respectivamente ao girar
+Junto colocamos um barulho de "VUU" ao iniciar
+
+
+Ideias
+----------------------------------------------------------------
+Temos que ter um app, podemos fazer em Flutter
+
+Servidor com a IA treinada, 
+Banco de dados para treinar
+Banco de dados para captar respostas (Ver se a previsão deu certo)
+
+
+
+------------------------
+Backlog
+
+Business model Canvas
+
+Ter a conversa com uma IA, para validar a stack e UML feitos
