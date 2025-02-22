@@ -1,9 +1,3 @@
-```sh
-Utilize o site <https://www.toptal.com/developers/gitignore> para gerar seu arquivo gitignore e apague este campo.
-
-Vide tutoriais do PI.
-```
-
 # FECAP - Fundação de Comércio Álvares Penteado
 
 <p align="center">
@@ -14,9 +8,9 @@ Vide tutoriais do PI.
 
 ## Nome do Grupo
 
-## Integrantes: <a href="https://www.linkedin.com/in/victorbarq/">Goku Sayajin</a>, <a href="https://www.linkedin.com/in/victorbarq/">Saitama One</a>, <a href="https://www.linkedin.com/in/victorbarq/">Ikki de Fenix</a>, <a href="https://www.linkedin.com/in/victorbarq/">Yusuke Urameshi</a>, <a href="https://www.linkedin.com/in/victorbarq/">Roronoa Zoro</a>
+## Integrantes: <a href="https://www.linkedin.com/in/bruno-costa-dourado-192b3b26a/">Bruno Dourado</a>, <a href="https://www.linkedin.com/in/alexsander-sudario-0a793524a/">Alexsander Sudario</a>, <a href="https://www.linkedin.com/in/ifelipemartins/">Felipe Martins</a>, <a href="https://www.linkedin.com/in/joao-vitor-leao-bonifacio-878833252/">João Vitor</a>, <a href="https://www.linkedin.com/in/vitor-tokunaga-82b344278/">Vitor Tokunaga</a>
 
-## Professores Orientadores: <a href="https://www.linkedin.com/in/victorbarq/">Dr. Victor Von Doom</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Saitama</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Strange</a>, <a href="https://www.linkedin.com/in/victorbarq/">Me. Yoda</a>, <a href="https://www.linkedin.com/in/victorbarq/">Dr. Gero</a>
+## Professores Orientadores: <a href="https://www.linkedin.com/in/remuniz/">Renata Muniz</a>, <a href="">Vinicius Heltai</a>, <a href="https://www.linkedin.com/in/rafael-diogo-rossetti/">Rafael Rossetti</a>, <a href="https://www.linkedin.com/in/marcos-minoru-nakatsugawa/">Marcos Minoru</a>, <a href="https://www.linkedin.com/in/rodrigo-da-rosa-phd/">Rodrigo da Rosa</a>
 
 ## Descrição
 
