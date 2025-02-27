@@ -1,0 +1,13 @@
+Daily – 27/02/2025
+
+Incremento do Backlog
+- Menu Principal
+- Tela de Configurações
+- Tela de Alterar Senha
+- Popup de Orçamentos
+- Catálogo de preços
+
+Levantamento de dúvidas
+- Qual serviço de banco de dados utilizar
+- Qual tipo de banco de dados utilizar (SQL ou NoSql)
+- Como implementar em um serviço de nuvem
