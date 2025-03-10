@@ -1,0 +1,3 @@
+- Consolidação da base de dados
+- Limpeza da base
+- Deploy da base limpa na cloud (Amazon RDS) 
