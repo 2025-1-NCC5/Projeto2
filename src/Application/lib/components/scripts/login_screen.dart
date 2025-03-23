@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'tela_cadastro.dart'; // Importe a tela de cadastro
+import 'package:shared_preferences/shared_preferences.dart';
+import 'tela_cadastro.dart';
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({Key? key}) : super(key: key);
@@ -13,10 +14,42 @@ class _TelaLoginState extends State<TelaLogin> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
   bool _senhaVisivel = false;
+  bool _lembrarSenha = false;
 
-  void _fazerLogin() {
+  @override
+  void initState() {
+    super.initState();
+    _carregarCredenciaisSalvas();
+  }
+
+  /// Carrega o e-mail e senha salvos, se existirem
+  Future<void> _carregarCredenciaisSalvas() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      emailController.text = prefs.getString('email') ?? '';
+      senhaController.text = prefs.getString('senha') ?? '';
+      _lembrarSenha = prefs.getBool('lembrar') ?? false;
+    });
+  }
+
+  /// Salva ou remove as credenciais de acordo com a opção "Lembrar senha"
+  Future<void> _salvarCredenciais() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_lembrarSenha) {
+      await prefs.setString('email', emailController.text);
+      await prefs.setString('senha', senhaController.text);
+      await prefs.setBool('lembrar', true);
+    } else {
+      await prefs.remove('email');
+      await prefs.remove('senha');
+      await prefs.setBool('lembrar', false);
+    }
+  }
+
+  void _fazerLogin() async {
     if (emailController.text == "teste@email.com" &&
         senhaController.text == "123456") {
+      await _salvarCredenciais(); // Salva as credenciais se o usuário marcar "Lembrar senha"
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Login realizado com sucesso!")),
       );
@@ -90,6 +123,22 @@ class _TelaLoginState extends State<TelaLogin> {
                 ),
               ),
               const SizedBox(height: 10),
+
+              // Checkbox "Lembrar senha"
+              Row(
+                children: [
+                  Checkbox(
+                    value: _lembrarSenha,
+                    onChanged: (value) {
+                      setState(() {
+                        _lembrarSenha = value!;
+                      });
+                    },
+                  ),
+                  const Text("Lembrar e-mail e senha"),
+                ],
+              ),
+
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
