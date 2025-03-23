@@ -81,6 +81,33 @@ app.put('/alterarSenha', async (req, res) => {
   }
 });
 
+app.put('/alterarUsuario', async (req, res) => {
+  const {email, senha, emailNovo} = req.body;
+  try{
+    const result = await pool.query(
+      'SELECT * FROM usuarios WHERE email = $1 AND senha = $2',
+      [email, senha]
+    );
+    if (result.rows.length > 0) {
+      try{
+        await pool.query(
+          'UPDATE usuarios SET email = $1 WHERE email = $2',
+          [emailNovo, email]
+          );
+          res.status(201).json(result.rows[0]); 
+      }catch{
+        console.error("Erro ao alterar usuário:", error);
+        res.status(500).send("Erro no servidor.");
+      }
+    }else{
+      res.status(401).json({ mensagem: "Email ou senha inválidos." });
+    }
+  }catch(error){
+    console.error("Erro ao procurar usuário:", error);
+    res.status(500).send("Erro no servidor.");
+  }
+});
+
 app.post('/deletarUsuario', async (req, res) => {
   const { email, senha } = req.body;
   try {
