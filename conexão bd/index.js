@@ -26,12 +26,24 @@ app.post('/cadastrar', async (req, res) => {
   const { nome, telefone, email, senha, data_de_nasc } = req.body;
   try {
     const result = await pool.query(
-      "INSERT INTO usuarios (nome, telefone, email, senha, data_de_nasc) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [nome, telefone, email, senha, data_de_nasc]
+      'SELECT * FROM usuarios WHERE email = $1',
+      [email]
     );
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error("Erro ao inserir usuário:", error);
+    if (result.rows.length > 0) {
+      res.status(200).json({ mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
+    } else {
+      try{
+        await pool.query(
+          "INSERT INTO usuarios (nome, telefone, email, senha, data_de_nasc) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+          [nome, telefone, email, senha, data_de_nasc]
+        );
+        res.status(201).json(result.rows[0]);
+      }catch (error){
+        console.error("Erro ao cadastrar usuário:", error);
+        res.status(500).send("Erro no servidor.");
+      }
+    }
+  } catch{
     res.status(500).send("Erro no servidor.");
   }
 });
