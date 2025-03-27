@@ -1,8 +1,16 @@
 const express = require('express');
 const pool = require('./bd');
 const app = express();
+const AWS = require('aws-sdk');
+require('dotenv').config();
 
 app.use(express.json());
+
+const ses = new AWS.SES({
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 
 app.get('/listarUsuario', async (req, res) => {
   const { email } = req.body;
@@ -76,7 +84,7 @@ app.put('/alterarSenha', async (req, res) => {
     if (result.rows.length > 0) {
       try{
         await pool.query(
-          'UPDATE usuarios SET senha = $1 WHERE email = $2',
+          'UPDATE usuarios SET senha = $1, token = NULL WHERE email = $2',
           [senhaNova, email]
           );
           res.status(201).json(result.rows[0]); 
@@ -85,7 +93,7 @@ app.put('/alterarSenha', async (req, res) => {
         res.status(500).send("Erro no servidor.");
       }
     }else{
-      res.status(401).json({ mensagem: "Email ou senha inválidos." });
+      res.status(401).json({ mensagem: "Email ou token inválidos." });
     }
   }catch(error){
     console.error("Erro ao procurar usuário:", error);
@@ -155,6 +163,71 @@ app.post('/calcularCorrida', async (req, res) => {
     res.status(500).send("Erro no servidor.");
   }
 });
+
+app.post('/recover-password', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const [rows] = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'E-mail não encontrado.' });
+    }
+    const user = rows[0];
+    const resetToken = generateResetToken();
+
+    const emailParams = {
+      Source: process.env.SES_FROM_EMAIL,
+      Destination: {
+        ToAddresses: [user.email],
+      },
+      Message: {
+        Subject: {
+          Data: 'Recuperação de Senha',
+        },
+        Body: {
+          Text: {
+            Data: `Clique no link para redefinir sua senha: ${process.env.APP_URL}/reset-password?token=${resetToken}`,
+          },
+        },
+      },
+    };
+
+    await ses.sendEmail(emailParams).promise();
+    res.status(200).json({ message: 'E-mail de recuperação enviado com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao processar a solicitação:', error);
+    res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+});
+
+app.post('/modificaçãoRecuperaçãoSenha', async (req, res) => {
+  const { email, token, senha } = req.body;
+
+  try {
+    const [rows] = await pool.query('SELECT * FROM usuarios WHERE email = $1 AND tokenSenha = $2', [email, token]);
+    if (result.rows.length > 0) {
+      try{
+        await pool.query(
+          'UPDATE usuarios SET senha = $1 WHERE email = $2',
+          [senha, email]
+          );
+          res.status(201).json(result.rows[0]); 
+      }catch{
+        console.error("Erro ao alterar senha:", error);
+        res.status(500).send("Erro no servidor.");
+      }
+    } else {
+      res.status(401).json({ mensagem: "Email ou token inválidos." });
+    }
+  } catch (error) {
+    console.error("Erro ao fazer login:", error);
+    res.status(500).send("Erro no servidor.");
+  }
+});
+
+function generateResetToken() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
 
 const PORT = 3000;
 app.listen(PORT, () => {
