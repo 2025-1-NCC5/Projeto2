@@ -12,6 +12,17 @@ const ses = new AWS.SES({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
+app.get('/acessarBancoDados', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM database-vuca'
+    );
+  } catch (error) {
+    console.error("Erro ao buscar usuário:", error);
+    res.status(500).send("Erro no servidor.");
+  }
+});
+
 app.get('/listarUsuario', async (req, res) => {
   const { email } = req.body;
   try {
