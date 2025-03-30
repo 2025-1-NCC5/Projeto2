@@ -1,0 +1,14 @@
+Distribuição das atividades da semana
+Tela de Perfil (Alexsander)
+Tela de Esqueci a Senha (Alexsander)
+
+Tela de termos (Felipe)
+Tela de Orçamentos (Felipe)
+
+Home (João)
+Popup de Orçamentos (João)
+
+Arrumar serviço de banco de dados (Vitor)
+
+Modelo Linear (Bruno)
+Modelo Gradient (Bruno)
