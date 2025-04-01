@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'components/scripts/login_screen.dart';
 import 'components/scripts/tela_cadastro.dart';
-import 'components/scripts/tela_login.dart';
-import 'components/scripts/tela_principal.dart';
 
 class TelaBoasVindas extends StatelessWidget {
   const TelaBoasVindas({Key? key}) : super(key: key);
