@@ -1,0 +1,6 @@
+Entregas feitas
+- Tela de Cadastro
+- Tela de Login
+- Termos e condições
+Endpoints
+- Deletar Usuário

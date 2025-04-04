@@ -1,0 +1,27 @@
+Paleta Clara
+
+#CCDBFF – Azul Pastel
+
+#223148 – Azul Noite
+
+#121212 – Preto Suave (Quase Preto)
+
+#262626 – Cinza Grafite
+
+#515151 – Cinza Escuro
+
+#D9D9D9 – Cinza Claro (Prata Fosco)
+
+#A3A3A3 – Cinza Médio
+____________________________________________________________________
+Paleta Escura
+
+#0F1116 – Preto Azulado
+
+#121212 – Preto Suave (Quase Preto)
+
+#D9D9D9 – Cinza Claro (Prata Fosco)
+
+#A3A3A3 – Cinza Médio
+
+#416383 – Azul Aço
