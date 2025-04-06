@@ -129,8 +129,74 @@ class _TelaCadastroState extends State<TelaCadastro> {
                         child: GestureDetector(
                           onTap:
                               () => _mostrarDialogo(
-                                "Política de Privacidade e Termos de Uso",
-                                "Aqui estão os termos e a política de privacidade...",
+                                "Política de Privacidade e Termos de Uso – VUCA",
+                                '''Política de Privacidade – VUCA
+
+1. Compromisso com a sua privacidade
+A sua privacidade é importante para nós. O VUCA respeita a sua privacidade em relação a qualquer informação pessoal que possamos coletar em nosso aplicativo e site.
+
+2. Coleta de dados
+Coletamos apenas as informações estritamente necessárias para oferecer um melhor serviço. Isso é feito de forma justa, legal e com o seu consentimento. Os dados coletados incluem:
+- Localização (se autorizada pelo usuário);
+- Preferências de uso do aplicativo;
+- Informações sobre o dispositivo;
+- Cookies e tecnologias similares para melhorar a experiência.
+
+3. Finalidade dos dados
+As informações coletadas são utilizadas para:
+- Personalizar estimativas de valores de corridas;
+- Melhorar a precisão e qualidade do serviço;
+- Garantir a segurança da plataforma e dos usuários;
+- Análise de dados para aperfeiçoamento contínuo do sistema.
+
+4. Armazenamento e segurança
+Os dados são mantidos somente pelo tempo necessário para prestar os serviços. Adotamos medidas rigorosas de segurança para evitar acesso não autorizado, perda ou roubo das informações.
+
+5. Compartilhamento de informações
+Não compartilhamos informações pessoais publicamente ou com terceiros, exceto quando exigido por lei. Podemos compartilhar dados com:
+- Serviços de mapas e geolocalização;
+- Plataformas de análise para melhoria contínua.
+
+6. Responsabilidade do usuário
+Ao utilizar o VUCA, o usuário concorda em:
+- Não se envolver em atividades ilegais ou contrárias à ordem pública;
+- Não disseminar conteúdo ofensivo, racista, xenofóbico ou ilegal;
+- Não causar danos aos sistemas da VUCA nem distribuir vírus.
+
+7. Atualizações
+Esta política pode ser atualizada ocasionalmente. Alterações relevantes serão comunicadas via aplicativo ou canais oficiais.
+
+8. Contato
+Para dúvidas ou informações sobre esta Política, entre em contato:
+📧 suporte@vuca.com
+
+Termos de Uso – VUCA
+
+1. Sobre o serviço
+O VUCA é um aplicativo que fornece estimativas de valores para corridas em apps de transporte. Não oferecemos transporte diretamente nem temos vínculos com plataformas de mobilidade.
+
+2. Licença de uso
+Você tem permissão para utilizar os materiais do VUCA apenas para fins pessoais e não comerciais. É proibido:
+- Modificar ou copiar o conteúdo;
+- Usar o conteúdo para fins comerciais ou públicos;
+- Fazer engenharia reversa do software;
+- Remover avisos de direitos autorais.
+
+O descumprimento de qualquer uma dessas regras implica a revogação imediata da licença.
+
+3. Limitação de responsabilidade
+As informações fornecidas são apresentadas “como estão”. Não garantimos total precisão nos valores estimados e não nos responsabilizamos por divergências.
+
+4. Links externos
+O VUCA pode conter links para sites de terceiros, sobre os quais não temos controle. Não nos responsabilizamos pelas práticas desses sites.
+
+5. Alterações nos termos
+Podemos atualizar estes Termos a qualquer momento. O uso contínuo do aplicativo implica aceitação das alterações.
+
+6. Legislação aplicável
+Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisdição exclusiva dos tribunais brasileiros.
+
+📅 Data de vigência: 22 de março de 2025''',
                               ),
                           child: const Text(
                             "Ao continuar, você concorda com nossa Política de Privacidade e os Termos de Uso",
