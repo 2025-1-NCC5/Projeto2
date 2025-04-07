@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'tela_cadastro.dart';
+import 'home.dart';
 import 'esquecue_senha.dart'; // Importe a tela de recuperação de senha
+import 'package:http/http.dart' as http;
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class _TelaLoginState extends State<TelaLogin> {
   bool _senhaVisivel = false;
 
   void _fazerLogin() {
-    if (emailController.text == "teste@email.com" &&
+       if (emailController.text == "teste@email.com" &&
         senhaController.text == "123456") {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Login realizado com sucesso!")),
@@ -27,6 +29,31 @@ class _TelaLoginState extends State<TelaLogin> {
       );
     }
   }
+
+  Future<void> fazerLoginDois(BuildContext context) async {
+      final url = Uri.parse("http://10.0.2.2:3000/acessarBancoDados");
+
+      try{
+        final response = await http.get(url);
+        if(response.statusCode == 200){
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${response.statusCode}')),
+        );
+        }
+      }catch (e) {
+      // Handle any errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error making request: $e')),
+      );
+      }
+  }
+
 
   void _mostrarMensagemEmDesenvolvimento() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -135,7 +162,7 @@ class _TelaLoginState extends State<TelaLogin> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: _fazerLogin,
+                  onPressed: () => fazerLoginDois(context),
                   child: const Text(
                     "Confirmar",
                     style: TextStyle(color: Colors.white),

@@ -15,8 +15,10 @@ const ses = new AWS.SES({
 app.get('/acessarBancoDados', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT * FROM database-vuca'
+      'SELECT * FROM ride_v2 limit 10'
+      
     );
+    res.status(200).json({mensagem: "Consulta feita com sucesso!", usuario: result.rows})
   } catch (error) {
     console.error("Erro ao buscar usuário:", error);
     res.status(500).send("Erro no servidor.");
