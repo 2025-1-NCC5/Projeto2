@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'tela_cadastro.dart';
-import 'home.dart';
-import 'esquecue_senha.dart'; // Importe a tela de recuperação de senha
+import 'package:shared_preferences/shared_preferences.dart';
+import './tela_cadastro.dart';
 import '../conexao_endpoints/usuarios.dart';
 import 'package:logger/logger.dart';
+
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({Key? key}) : super(key: key);
