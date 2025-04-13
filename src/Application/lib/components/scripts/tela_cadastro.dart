@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/scripts/login_screen.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './tela_inicial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../conexao_endpoints/usuarios.dart';
 
