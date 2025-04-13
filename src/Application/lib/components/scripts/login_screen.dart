@@ -34,13 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
   // }
 
   void login() async {
-      var logger = Logger();
-
-      logger.i("Inicio da Função");
-      logger.d(emailController.text + " " + senhaController.text);
       final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-
-      logger.i("Resposta da API");
       if(response != null && response["sucesso"] == true){
         Navigator.push(
         context,

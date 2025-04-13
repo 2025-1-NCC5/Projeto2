@@ -18,13 +18,10 @@ class Usuarios {
   }
 
   static Future<Map<String, dynamic>?> fazerLogin(String email, String senha) async {
-      var logger = Logger();
       var response = await TiposConexoes.post("login",{
         'email': email,
         'senha' : senha,
       });
-      logger.i("Início da Chamada POST - Login");
-      logger.i(response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -37,10 +34,7 @@ class Usuarios {
   }  
 
    static Future<Map<String, dynamic>?> teste() async {
-      var logger = Logger();
       var response = await TiposConexoes.get("acessarBancoDados");
-      logger.i("Início da Chamada GET - Teste");
-      logger.i(response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
