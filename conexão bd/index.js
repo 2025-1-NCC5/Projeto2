@@ -6,6 +6,7 @@ const AWS = require('aws-sdk');
 require('dotenv').config();
 
 app.use(cors());
+app.use(express.json());
 
 const ses = new AWS.SES({
   region: process.env.AWS_REGION,
@@ -14,7 +15,6 @@ const ses = new AWS.SES({
 });
 
 app.get('/acessarBancoDados', async (req, res) => {
-  console.log("Chamaram aqui em");
   try {
     const result = await pool.query(
       'SELECT * FROM ride_v2 limit 10'
@@ -53,7 +53,7 @@ app.post('/cadastrar', async (req, res) => {
       [email]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({ mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
+      res.status(200).json({sucesso: true, mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
     } else {
       try{
         await pool.query(
@@ -63,7 +63,7 @@ app.post('/cadastrar', async (req, res) => {
         res.status(201).json(result.rows[0]);
       }catch (error){
         console.error("Erro ao cadastrar usuário:", error);
-        res.status(500).send("Erro no servidor.");
+        res.status(500).send({sucesso: false, mensagem: "Erro no servidor."});
       }
     }
   } catch{
@@ -72,9 +72,7 @@ app.post('/cadastrar', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  console.log(req.body);
   const {email, senha} = req.body;
-  console.log(req.body);
   try {
     const result = await pool.query(
       'SELECT * FROM usuarios WHERE email = $1 AND senha = $2',
