@@ -13,6 +13,7 @@ const ses = new AWS.SES({
 });
 
 app.get('/acessarBancoDados', async (req, res) => {
+  console.log("Chamaram aqui em");
   try {
     const result = await pool.query(
       'SELECT * FROM ride_v2 limit 10'
@@ -69,17 +70,18 @@ app.post('/cadastrar', async (req, res) => {
   }
 });
 
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const {email, senha} = req.body;
+  console.log(req.body);
   try {
     const result = await pool.query(
       'SELECT * FROM usuarios WHERE email = $1 AND senha = $2',
       [email, senha]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({ mensagem: "Login realizado com sucesso!", usuario: result.rows[0]});
+      res.status(200).json({ sucesso: true,  mensagem: "Login realizado com sucesso!", usuario: result.rows[0]});
     } else {
-      res.status(401).json({ mensagem: "Email ou senha inválidos." });
+      res.status(401).json({ sucesso: false, mensagem: "Email ou senha inválidos." });
     }
   } catch (error) {
     console.error("Erro ao fazer login:", error);
