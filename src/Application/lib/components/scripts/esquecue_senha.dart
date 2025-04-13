@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
-class TelaRecuperacaoSenha extends StatelessWidget {
+class TelaRecuperacaoSenha extends StatefulWidget {
+  const TelaRecuperacaoSenha({super.key});
+
+  @override
+  State<TelaRecuperacaoSenha> createState() => _TelaRecuperacaoSenhaState();
+}
+
+class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
   final TextEditingController emailController = TextEditingController();
-
-  TelaRecuperacaoSenha({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

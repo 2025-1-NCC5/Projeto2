@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/scripts/login_screen.dart';
-import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:flutter_application_2/components/scripts/login_screen.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import './tela_inicial.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../conexao_endpoints/usuarios.dart';
+import './login_screen.dart';
+import 'package:logger/logger.dart';
+
+//import 'package:flutter_application_2/models/cadastro.dart';
+//import 'package:flutter_application_2/services/cadastro.dart';
 
 
 class TelaCadastro extends StatefulWidget {
-  const TelaCadastro({Key? key}) : super(key: key);
+  const TelaCadastro({super.key});
 
   @override
   State<TelaCadastro> createState() => _TelaCadastroState();
@@ -195,7 +199,7 @@ Esta política pode ser atualizada ocasionalmente. Alterações relevantes serã
 Para dúvidas ou informações sobre esta Política, entre em contato:
 📧 suporte@vuca.com
 
-Termos de Uso – VUCA
+Termos de Uso VUCA
 
 1. Sobre o serviço
 O VUCA é um aplicativo que fornece estimativas de valores para corridas em apps de transporte. Não oferecemos transporte diretamente nem temos vínculos com plataformas de mobilidade.
@@ -240,12 +244,7 @@ Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisd
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildButton("Voltar", Colors.black, Colors.white, () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TelaBoasVindas(),
-                          ),
-                        );
+                        () => irParaTelaInicial();
                       }),
                       _buildButton(
                         "Confirmar",
@@ -356,5 +355,20 @@ Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisd
         ),
       ),
     );
+  }
+
+  void irParaTelaInicial() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TelaBoasVindas()),
+    );
+    //}else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
   }
 }
