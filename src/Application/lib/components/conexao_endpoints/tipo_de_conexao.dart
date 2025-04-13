@@ -8,11 +8,8 @@ class TiposConexoes {
   // static const String baseUrl = 'http://127.0.0.1:3000';
 
   static Future<http.Response> post(String endpoint, Map<String, dynamic> data) async {
-    var logger = Logger();
 
     var url = Uri.parse('$baseUrl/$endpoint');
-    logger.i("Início da Chamada POST");
-    logger.d(data.toString());
     return await http.post(
       url,
       headers: {'Content-Type': 'application/json'},

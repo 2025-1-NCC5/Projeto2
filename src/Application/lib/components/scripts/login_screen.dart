@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/scripts/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'tela_cadastro.dart';
-import 'home.dart';
-import 'esquecue_senha.dart'; // Importe a tela de recuperação de senha
+import 'package:shared_preferences/shared_preferences.dart';
+import './tela_cadastro.dart';
+import './esquecue_senha.dart';
 import '../conexao_endpoints/usuarios.dart';
 import 'package:logger/logger.dart';
+
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({Key? key}) : super(key: key);
@@ -34,17 +36,11 @@ class _TelaLoginState extends State<TelaLogin> {
   // }
 
   void login() async {
-      var logger = Logger();
-
-      logger.i("Inicio da Função");
-      logger.d(emailController.text + " " + senhaController.text);
       final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-
-      logger.i("Resposta da API");
       if(response != null && response["sucesso"] == true){
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       }else{
         String errorMessage = response?['message'] ?? 'Something went wrong!';
@@ -83,7 +79,7 @@ class _TelaLoginState extends State<TelaLogin> {
       if(response != null){
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       }else{
         String errorMessage = response?['message'] ?? 'Something went wrong!';
