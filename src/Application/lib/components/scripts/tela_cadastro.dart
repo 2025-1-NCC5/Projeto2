@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/scripts/login_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'tela_cadastro.dart';
 
-class TelaLogin extends StatefulWidget {
-  const TelaLogin({Key? key}) : super(key: key);
+class TelaCadastro extends StatefulWidget {
+  const TelaCadastro({Key? key}) : super(key: key);
 
   @override
-  _TelaLoginState createState() => _TelaLoginState();
+  _TelaCadastroState createState() => _TelaCadastroState();
 }
 
-class _TelaLoginState extends State<TelaLogin> {
+class _TelaCadastroState extends State<TelaCadastro> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
   bool _senhaVisivel = false;
@@ -188,7 +188,7 @@ class _TelaLoginState extends State<TelaLogin> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TelaCadastro()),
+                    MaterialPageRoute(builder: (context) => TelaLogin()),
                   );
                 },
                 child: const Text("Não tem uma conta? Cadastrar"),
