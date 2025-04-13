@@ -1,10 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const pool = require('./bd');
 const app = express();
 const AWS = require('aws-sdk');
 require('dotenv').config();
 
-app.use(express.json());
+app.use(cors());
 
 const ses = new AWS.SES({
   region: process.env.AWS_REGION,
@@ -71,6 +72,7 @@ app.post('/cadastrar', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+  console.log(req.body);
   const {email, senha} = req.body;
   console.log(req.body);
   try {
