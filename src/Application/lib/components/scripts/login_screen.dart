@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import './tela_cadastro.dart';
+import './esquecue_senha.dart';
 
 class TelaLogin extends StatefulWidget {
-  const TelaLogin({Key? key}) : super(key: key);
+  const TelaLogin({super.key});
 
   @override
-  _TelaLoginState createState() => _TelaLoginState();
+  State<TelaLogin> createState() => _TelaLoginState();
 }
 
 class _TelaLoginState extends State<TelaLogin> {
@@ -94,14 +95,7 @@ class _TelaLoginState extends State<TelaLogin> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TelaRecuperacaoSenha(),
-                      ),
-                    );
-                  },
+                  onPressed: () => irParaEsqueceuSenha(),
                   child: const Text("Esqueceu sua senha?"),
                 ),
               ),
@@ -144,12 +138,7 @@ class _TelaLoginState extends State<TelaLogin> {
               ),
               const SizedBox(height: 10),
               TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TelaCadastro()),
-                  );
-                },
+                onPressed: () => irParaCadastro(),
                 child: const Text("Não tem uma conta? Cadastrar"),
               ),
               const SizedBox(height: 20),
@@ -158,5 +147,35 @@ class _TelaLoginState extends State<TelaLogin> {
         ),
       ),
     );
+  }
+
+  void irParaEsqueceuSenha() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaRecuperacaoSenha()),
+      );
+    //}else{
+        //String errorMessage = response?['message'] ?? 'Something went wrong!';
+        //ScaffoldMessenger.of(context).showSnackBar(
+          //SnackBar(content: Text('Request failed: ${errorMessage}')),
+        //);
+    //}
+  }
+
+  void irParaCadastro() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaCadastro()),
+      );
+    //}else{
+        //String errorMessage = response?['message'] ?? 'Something went wrong!';
+        //ScaffoldMessenger.of(context).showSnackBar(
+          //SnackBar(content: Text('Request failed: ${errorMessage}')),
+        //);
+    //}
   }
 }

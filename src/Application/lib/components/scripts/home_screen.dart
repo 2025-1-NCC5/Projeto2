@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import './configuration_screen.dart';
+import './orcamento_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,14 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ConfigurationScreen(),
-                    ),
-                  );
-                },
+                onPressed: () => irParaConfiguration(),
                 icon: SvgPicture.asset('assets/img_configuracoes.svg'),
               ),
             ),
@@ -205,12 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Botão "Calcular Corrida"
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Fecha o popup
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Calculando corrida...")),
-                    );
-                  },
+                  onPressed: () => irParaOrcamento(),  
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0XFF416383),
                     foregroundColor: Color(0XFFD9D9D9),
@@ -234,5 +223,39 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  void irParaConfiguration() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConfigurationScreen()),
+      );
+    //}else{
+        //String errorMessage = response?['message'] ?? 'Something went wrong!';
+        //ScaffoldMessenger.of(context).showSnackBar(
+          //SnackBar(content: Text('Request failed: ${errorMessage}')),
+        //);
+    //}
+  }
+
+  void irParaOrcamento() async {
+    Navigator.pop(context); // Fecha o popup
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Calculando corrida...")),
+    );
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => OrcamentoScreen()),
+      );
+    //}else{
+        //String errorMessage = response?['message'] ?? 'Something went wrong!';
+        //ScaffoldMessenger.of(context).showSnackBar(
+          //SnackBar(content: Text('Request failed: ${errorMessage}')),
+        //);
+    //}
   }
 }

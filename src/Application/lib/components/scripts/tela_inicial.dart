@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'tela_cadastro.dart';
 
-class TelaBoasVindas extends StatelessWidget {
-  const TelaBoasVindas({Key? key}) : super(key: key);
+class TelaBoasVindas extends StatefulWidget {
+  const TelaBoasVindas({super.key});
 
+  @override
+  State<TelaBoasVindas> createState() => _TelaBoasVindasState();
+}
+
+class _TelaBoasVindasState extends State<TelaBoasVindas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,17 +32,11 @@ class TelaBoasVindas extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               _buildButton("ENTRAR", Colors.black, Colors.white, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TelaLogin()),
-                );
+                () => irParaLogin();
               }),
               const SizedBox(height: 15),
               _buildButton("CADASTRAR", Colors.white, Colors.black, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TelaCadastro()),
-                );
+                () => irParaCadastro();
               }),
               const SizedBox(height: 40),
               const Text(
@@ -81,5 +80,35 @@ class TelaBoasVindas extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void irParaLogin() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TelaLogin()),
+    );
+    //}else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
+  }
+
+  void irParaCadastro() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TelaCadastro()),
+    );
+    //}else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
   }
 }
