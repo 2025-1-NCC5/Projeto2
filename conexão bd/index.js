@@ -6,6 +6,7 @@ const AWS = require('aws-sdk');
 require('dotenv').config();
 
 app.use(cors());
+app.use(express.json());
 
 const ses = new AWS.SES({
   region: process.env.AWS_REGION,
