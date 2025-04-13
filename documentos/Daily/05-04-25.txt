@@ -1,0 +1,3 @@
+05-04-25
+
+Descobrir como conectar os endpoints feitos com o frontend do flutter

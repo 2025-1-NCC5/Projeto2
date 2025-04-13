@@ -12,8 +12,11 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.2.2
+
   flutter_svg: ^2.0.9
   font_awesome_flutter: ^10.7.0
+  http: ^1.3.0
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +57,4 @@ flutter:
         - asset: assets/fonts/Poppins-SemiBoldItalic.ttf
         - asset: assets/fonts/Poppins-Thin.ttf
         - asset: assets/fonts/Poppins-ThinItalic.ttf
+

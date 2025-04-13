@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import './tela_inicial.dart';
+//import 'package:flutter_application_2/models/cadastro.dart';
+//import 'package:flutter_application_2/services/cadastro.dart';
+
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
 
   @override
   State<TelaCadastro> createState() => _TelaCadastroState();
+
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {

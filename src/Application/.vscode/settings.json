@@ -316,5 +316,8 @@
         "Você",
         "Voltar",
         "xenofóbico"
-    ]
+    ],
+  "dart.flutterSdkPath": "C:\\src\\flutter",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "cmake.ignoreCMakeListsMissing": true,
 }

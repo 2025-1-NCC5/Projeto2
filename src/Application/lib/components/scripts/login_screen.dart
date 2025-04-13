@@ -3,6 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import './tela_cadastro.dart';
 import './esquecue_senha.dart';
+import './home_screen.dart';
+import '../conexao_endpoints/usuarios.dart';
+import 'package:logger/logger.dart';
+
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
@@ -16,17 +20,71 @@ class _TelaLoginState extends State<TelaLogin> {
   final TextEditingController senhaController = TextEditingController();
   bool _senhaVisivel = false;
 
-  void _fazerLogin() {
-    if (emailController.text == "teste@email.com" &&
-        senhaController.text == "123456") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login realizado com sucesso!")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("E-mail ou senha inválidos")),
-      );
-    }
+  // void _fazerLogin() {
+  //      if (emailController.text == "teste@email.com" &&
+  //       senhaController.text == "123456") {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Login realizado com sucesso!")),
+  //     );
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("E-mail ou senha inválidos")),
+  //     );
+  //   }
+  // }
+
+  void login() async {
+      final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+      if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
+      // try{
+      //   final response = await http.get(url);
+      //   if(response.statusCode == 200){
+      //     Navigator.push(
+      //             context,
+      //             MaterialPageRoute(builder: (context) => HomePage()),
+      //           );
+      //   }
+      //   else{
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Request failed: ${response.statusCode}')),
+      //   );
+      //   }
+      // }catch (e) {
+      // // Handle any errors
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Error making request: $e')),
+      // );
+      // }
+  }
+  void teste() async {
+      var logger = Logger();
+
+      logger.i("Inicio da Função de Teste");
+      logger.d(emailController.text + " " + senhaController.text);
+      final response = await Usuarios.teste();
+
+      logger.i("Resposta da API");
+      if(response != null){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
   }
 
   void _mostrarMensagemEmDesenvolvimento() {
@@ -129,7 +187,7 @@ class _TelaLoginState extends State<TelaLogin> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: _fazerLogin,
+                  onPressed: () => login(),
                   child: const Text(
                     "Confirmar",
                     style: TextStyle(color: Colors.white),

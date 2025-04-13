@@ -1,0 +1,9 @@
+Planning 12-04-25
+
+Foco na entrega 2 do PI
+Definição das terefas da semana
+- Alek: Tema claro e escuro
+- Felipe: Regressão Linear
+- João: Tela de Termos
+- Bruno: Conexão dos endpoints
+- Vitor: Monitoramento de recursos de uma instância
