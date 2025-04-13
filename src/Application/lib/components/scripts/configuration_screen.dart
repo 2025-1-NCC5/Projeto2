@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_application_2/components/scripts/login_screen.dart';
 import './home_screen.dart';
+import '../conexao_endpoints/usuarios.dart';
 
 class ConfigurationScreen extends StatefulWidget {
   const ConfigurationScreen({super.key});
@@ -10,6 +12,20 @@ class ConfigurationScreen extends StatefulWidget {
 }
 
 class _ConfigurationScreenState extends State<ConfigurationScreen> {
+  void excluirConta(String email, String senha) async {
+      final response = await Usuarios.excluirConta(email, senha);
+      if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -880,7 +896,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
                         ),
                       ),
-
+                      
                       // Botão Excluir Conta
                       ElevatedButton(
                         onPressed: () {
@@ -902,13 +918,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
+                            excluirConta(emailController.text, passwordController.text);
                             // Fechar popup e confirmar exclusão da conta
                             Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Conta excluída com sucesso!"),
-                              ),
-                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(

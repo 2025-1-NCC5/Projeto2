@@ -48,25 +48,6 @@ class _TelaLoginState extends State<TelaLogin> {
           SnackBar(content: Text('Request failed: ${errorMessage}')),
         );
       }
-      // try{
-      //   final response = await http.get(url);
-      //   if(response.statusCode == 200){
-      //     Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => HomePage()),
-      //           );
-      //   }
-      //   else{
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('Request failed: ${response.statusCode}')),
-      //   );
-      //   }
-      // }catch (e) {
-      // // Handle any errors
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Error making request: $e')),
-      // );
-      // }
   }
   void teste() async {
       var logger = Logger();

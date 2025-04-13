@@ -53,14 +53,14 @@ app.post('/cadastrar', async (req, res) => {
       [email]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({sucesso: true, mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
+      res.status(409).json({sucesso: true, mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
     } else {
       try{
         await pool.query(
           "INSERT INTO usuarios (nome, telefone, email, senha, data_de_nasc) VALUES ($1, $2, $3, $4, $5) RETURNING *",
           [nome, telefone, email, senha, data_de_nasc]
         );
-        res.status(201).json(result.rows[0]);
+        res.status(201).json({sucesso: true, usuario: result.rows[0]});
       }catch (error){
         console.error("Erro ao cadastrar usuário:", error);
         res.status(500).send({sucesso: false, mensagem: "Erro no servidor."});
@@ -144,6 +144,7 @@ app.put('/alterarUsuario', async (req, res) => {
 });
 
 app.post('/deletarUsuario', async (req, res) => {
+  console.log("Chegou na exclusão");
   const { email, senha } = req.body;
   try {
     const result = await pool.query(
@@ -155,13 +156,14 @@ app.post('/deletarUsuario', async (req, res) => {
         await pool.query(
           'DELETE FROM usuarios WHERE email = $1',
           [email]);
-          res.status(201).json(result.rows[0]); 
+          res.status(200).json({sucesso: true, usuario: result.rows[0]}); 
+          console.log("Excluiu");
       }catch{
-        console.error("Erro ao alterar senha:", error);
-        res.status(500).send("Erro no servidor.");
+        console.error("Erro ao excluir usuário:", error);
+        res.status(500).json({sucesso: false, mensagem: "Erro ao excluir usuário." });
       }
     }else{
-      res.status(401).json({ mensagem: "Email ou senha inválidos." });
+      res.status(401).json({ sucesso: false, mensagem: "Email ou senha inválidos." });
     }
   } catch (error) {
     console.error("Erro ao deletar usuário:", error);
