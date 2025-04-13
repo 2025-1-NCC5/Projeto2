@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_application_2/components/scripts/login_screen.dart';
 import './home_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
+import './tela_perfil.dart';
 
 class ConfigurationScreen extends StatefulWidget {
   const ConfigurationScreen({super.key});
@@ -37,12 +38,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                },
+                onPressed: () => irParaHome(),
                 icon: SvgPicture.asset('assets/grp_returner.svg'),
               ),
             ),
@@ -61,7 +57,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // Campo Meu Perfil
-            Container(
+            GestureDetector(
+              onTap: () => irParaTelaPerfil(),
+              child: Container(
               width: 350,
               height: 80,
               color: Color(0xFFCCDBFF),
@@ -114,6 +112,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
                 ],
               ),
+            ),
             ),
 
             // Campo Alterar Senha
@@ -1020,5 +1019,35 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
         );
       },
     );
+  }
+
+  void irParaTelaPerfil() async {
+      //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+      //if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaPerfil()),
+        );
+      //}//else{
+        //String errorMessage = response?['message'] ?? 'Something went wrong!';
+        //ScaffoldMessenger.of(context).showSnackBar(
+          //SnackBar(content: Text('Request failed: ${errorMessage}')),
+        //);
+      //}
+  }
+
+  void irParaHome() async {
+      //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+      //if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      //}else{
+        //String errorMessage = response?['message'] ?? 'Something went wrong!';
+        //ScaffoldMessenger.of(context).showSnackBar(
+          //SnackBar(content: Text('Request failed: ${errorMessage}')),
+        //);
+      //}
   }
 }
