@@ -244,7 +244,7 @@ Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisd
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildButton("Voltar", Colors.black, Colors.white, () {
-                        () => irParaTelaInicial();
+                        irParaTelaInicial();
                       }),
                       _buildButton(
                         "Confirmar",

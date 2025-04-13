@@ -32,11 +32,11 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
               ),
               const SizedBox(height: 30),
               _buildButton("ENTRAR", Colors.black, Colors.white, () {
-                () => irParaLogin();
+                irParaLogin();
               }),
               const SizedBox(height: 15),
               _buildButton("CADASTRAR", Colors.white, Colors.black, () {
-                () => irParaCadastro();
+                irParaCadastro();
               }),
               const SizedBox(height: 40),
               const Text(
