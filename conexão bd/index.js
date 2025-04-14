@@ -3,6 +3,7 @@ const cors = require('cors');
 const pool = require('./bd');
 const app = express();
 const AWS = require('aws-sdk');
+const jwt =  require('jsonwebtoken');
 require('dotenv').config();
 
 app.use(cors());
@@ -13,6 +14,43 @@ const ses = new AWS.SES({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
+
+const secretKey = process.env.JWT_SECRET;
+
+app.post('/gerarToken', async (req,res) => {
+  const {email, senha} = req.body;
+  if(email == 'teste' && senha == 'teste'){
+    const payload = {email : email};
+    const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+    res.json({token});
+  }else{
+    return null;
+  }
+})
+
+app.post('/verificarToken', async (req,res) => {
+  const {token} = req.body;
+  try{
+    const decoded = jwt.verify(token,secretKey);
+    res.json({
+      valido:true,
+      mensagem:decoded
+    })
+  }catch(error){
+    if( error.name === 'TokenExpiredError'){
+      res.json({
+        valido:false,
+        mensagem:"Token expirou"
+      })
+    }else{
+      res.json({
+        valido:false,
+        mensagem:"Token inválido"
+      })
+    }
+  }
+})
+
 
 app.get('/acessarBancoDados', async (req, res) => {
   try {
