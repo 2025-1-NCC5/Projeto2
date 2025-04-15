@@ -5,6 +5,7 @@ const app = express();
 const AWS = require('aws-sdk');
 const jwt =  require('jsonwebtoken');
 require('dotenv').config();
+const secretKey = process.env.JWT_SECRET;
 
 app.use(cors());
 app.use(express.json());
@@ -15,7 +16,6 @@ const ses = new AWS.SES({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-const secretKey = process.env.JWT_SECRET;
 
 app.post('/gerarToken', async (req,res) => {
   const {email, senha} = req.body;
@@ -117,7 +117,9 @@ app.post('/login', async (req, res) => {
       [email, senha]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({ sucesso: true,  mensagem: "Login realizado com sucesso!", usuario: result.rows[0]});
+      const payload = {email : email};
+      const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+      res.status(200).json({ sucesso: true,  mensagem: "Login realizado com sucesso!", token: token});
     } else {
       res.status(401).json({ sucesso: false, mensagem: "Email ou senha inválidos." });
     }
