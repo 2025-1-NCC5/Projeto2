@@ -59,6 +59,14 @@ class Usuarios {
       }
   }
 
+  static  Future<Map<String, dynamic>?> verificarToken(String token) async {
+    var response = await TiposConexoes.post("verificarToken", {
+      'token': token,
+    });
+    return jsonDecode(response.body);
+  }
+
+
    static Future<Map<String, dynamic>?> teste() async {
       var response = await TiposConexoes.get("acessarBancoDados");
 

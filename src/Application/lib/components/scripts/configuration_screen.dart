@@ -6,7 +6,8 @@ import '../conexao_endpoints/usuarios.dart';
 import './tela_perfil.dart';
 
 class ConfigurationScreen extends StatefulWidget {
-  const ConfigurationScreen({super.key});
+   final String token;
+  const ConfigurationScreen({super.key, required this.token});
 
   @override
   State<ConfigurationScreen> createState() => _ConfigurationScreenState();
@@ -1026,7 +1027,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       //if(response != null && response["sucesso"] == true){
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => TelaPerfil()),
+        MaterialPageRoute(builder: (context) => TelaPerfil(token : widget.token)),
         );
       //}//else{
         //String errorMessage = response?['message'] ?? 'Something went wrong!';
@@ -1041,7 +1042,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       //if(response != null && response["sucesso"] == true){
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen(token : widget.token)),
         );
       //}else{
         //String errorMessage = response?['message'] ?? 'Something went wrong!';

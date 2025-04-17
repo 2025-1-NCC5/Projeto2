@@ -4,7 +4,9 @@ const pool = require('./bd');
 const nodemailer = require('nodemailer');
 const app = express();
 const AWS = require('aws-sdk');
+const jwt =  require('jsonwebtoken');
 require('dotenv').config();
+const secretKey = process.env.JWT_SECRET;
 
 app.use(cors());
 app.use(express.json());
@@ -14,6 +16,44 @@ const ses = new AWS.SES({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
+
+
+app.post('/gerarToken', async (req,res) => {
+  const {email, senha} = req.body;
+  if(email == 'teste' && senha == 'teste'){
+    const payload = {email : email};
+    const token = jwt.sign(payload, secretKey, {expiresIn: '15s'});
+    res.json({token});
+  }else{
+    return null;
+  }
+})
+
+app.post('/verificarToken', async (req,res) => {
+  const {token} = req.body;
+  try{
+    const decoded = jwt.verify(token,secretKey);
+    // email = decoded["email"];
+    // console.log(email)
+    res.status(200).json({
+      valido:true,
+      mensagem:decoded
+    })
+  }catch(error){
+    if( error.name === 'TokenExpiredError'){
+      res.status(401).json({
+        valido:false,
+        mensagem:"Token expirou, favor fazer login"
+      })
+    }else{
+      res.status(401).json()({
+        valido:false,
+        mensagem:"Token inválido, favor fazer login"
+      })
+    }
+  }
+})
+
 
 app.get('/acessarBancoDados', async (req, res) => {
   try {
@@ -80,7 +120,9 @@ app.post('/login', async (req, res) => {
       [email, senha]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({ sucesso: true, mensagem: "Login realizado com sucesso!", usuario: result.rows[0] });
+      const payload = {email : email};
+      const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+      res.status(200).json({ sucesso: true,  mensagem: "Login realizado com sucesso!", token: token});
     } else {
       res.status(401).json({ sucesso: false, mensagem: "Email ou senha inválidos." });
     }

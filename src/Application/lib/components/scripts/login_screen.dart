@@ -37,37 +37,38 @@ class _TelaLoginState extends State<TelaLogin> {
   void login() async {
       final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
       if(response != null && response["sucesso"] == true){
+        String token = response["token"];
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen(token:token)),
         );
       }else{
-        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Request failed: ${errorMessage}')),
         );
       }
   }
-  void teste() async {
-      var logger = Logger();
+  // void teste() async {
+  //     var logger = Logger();
 
-      logger.i("Inicio da Função de Teste");
-      logger.d(emailController.text + " " + senhaController.text);
-      final response = await Usuarios.teste();
+  //     logger.i("Inicio da Função de Teste");
+  //     logger.d(emailController.text + " " + senhaController.text);
+  //     final response = await Usuarios.teste();
 
-      logger.i("Resposta da API");
-      if(response != null){
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      }else{
-        String errorMessage = response?['message'] ?? 'Something went wrong!';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Request failed: ${errorMessage}')),
-        );
-      }
-  }
+  //     logger.i("Resposta da API");
+  //     if(response != null){
+  //       Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => HomeScreen()),
+  //       );
+  //     }else{
+  //       String errorMessage = response?['message'] ?? 'Something went wrong!';
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Request failed: ${errorMessage}')),
+  //       );
+  //     }
+  // }
 
   void _mostrarMensagemEmDesenvolvimento() {
     ScaffoldMessenger.of(context).showSnackBar(
