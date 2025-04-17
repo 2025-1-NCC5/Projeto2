@@ -21,7 +21,7 @@ app.post('/gerarToken', async (req,res) => {
   const {email, senha} = req.body;
   if(email == 'teste' && senha == 'teste'){
     const payload = {email : email};
-    const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+    const token = jwt.sign(payload, secretKey, {expiresIn: '15s'});
     res.json({token});
   }else{
     return null;
@@ -32,20 +32,22 @@ app.post('/verificarToken', async (req,res) => {
   const {token} = req.body;
   try{
     const decoded = jwt.verify(token,secretKey);
-    res.json({
+    // email = decoded["email"];
+    // console.log(email)
+    res.status(200).json({
       valido:true,
       mensagem:decoded
     })
   }catch(error){
     if( error.name === 'TokenExpiredError'){
-      res.json({
+      res.status(401).json({
         valido:false,
-        mensagem:"Token expirou"
+        mensagem:"Token expirou, favor fazer login"
       })
     }else{
-      res.json({
+      res.status(401).json()({
         valido:false,
-        mensagem:"Token inválido"
+        mensagem:"Token inválido, favor fazer login"
       })
     }
   }

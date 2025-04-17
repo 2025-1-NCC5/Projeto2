@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TelaPerfil extends StatefulWidget {
-  const TelaPerfil({super.key});
+  final String token;
+  const TelaPerfil({super.key,required this.token});
 
   @override
   State<TelaPerfil> createState() => _TelaPerfilState();

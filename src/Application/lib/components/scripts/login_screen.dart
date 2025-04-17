@@ -43,7 +43,7 @@ class _TelaLoginState extends State<TelaLogin> {
         MaterialPageRoute(builder: (context) => HomeScreen(token:token)),
         );
       }else{
-        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Request failed: ${errorMessage}')),
         );
