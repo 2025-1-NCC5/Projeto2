@@ -70,5 +70,22 @@ class Usuarios {
       } else{
         return null;
       }
-  }  
+  } 
+
+  static Future<Map<String, dynamic>?> mandarEmailRecuperacaoDeSenha(String email) async {
+    var logger = Logger();
+    var response = await TiposConexoes.post('recover-password', {
+      'email': email,
+    });
+
+    logger.i("Início da Chamada POST - Recuperação de Senha");
+    logger.i(response.body);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      print('Failed to create user: ${response.statusCode}');
+      return null;
+    }
+  } 
 }
