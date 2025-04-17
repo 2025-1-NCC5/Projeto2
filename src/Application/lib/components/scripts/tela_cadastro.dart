@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/tela_inicial.dart';
-import 'package:flutter_application_2/components/tela_boas_vindas.dart';
-import 'package:flutter_application_2/models/cadastro.dart';
-import 'package:flutter_application_2/services/cadastro.dart';
+//import 'package:flutter_application_2/components/scripts/login_screen.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+import './tela_inicial.dart';
+import '../conexao_endpoints/usuarios.dart';
+import './login_screen.dart';
+import 'package:logger/logger.dart';
+
+//import 'package:flutter_application_2/models/cadastro.dart';
+//import 'package:flutter_application_2/services/cadastro.dart';
+
 
 class TelaCadastro extends StatefulWidget {
-  const TelaCadastro({Key? key}) : super(key: key);
+  const TelaCadastro({super.key});
 
   @override
   State<TelaCadastro> createState() => _TelaCadastroState();
@@ -16,6 +23,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController sobrenomeController = TextEditingController();
+  final TextEditingController telefoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController confirmarEmailController =
       TextEditingController();
@@ -26,6 +34,27 @@ class _TelaCadastroState extends State<TelaCadastro> {
       TextEditingController();
   bool _senhaVisivel = false;
   bool _aceitouTermos = false;
+
+  void cadastrar() async {
+      var logger = Logger();
+
+      logger.i("Inicio da Função");
+      logger.d(nomeController.text + " " + telefoneController.text + " " + emailController.text + " " + senhaController.text + " " + dataNascimentoController.text);
+      final response = await Usuarios.criarUsuario(nomeController.text, telefoneController.text, emailController.text, senhaController.text, dataNascimentoController.text);
+
+      logger.i("Resposta da API");
+      if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
+  }
 
   void _mostrarDialogo(String titulo, String conteudo) {
     showDialog(
@@ -56,17 +85,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
     if (dataSelecionada != null) {
       setState(() {
         dataNascimentoController.text =
-            "${dataSelecionada.day}/${dataSelecionada.month}/${dataSelecionada.year}";
+            "${dataSelecionada.day}-${dataSelecionada.month}-${dataSelecionada.year}";
       });
     }
   }
 
   void _confirmarCadastro() {
     if (_formKey.currentState!.validate() && _aceitouTermos) {
-      _mostrarDialogo(
-        "Cadastro realizado",
-        "Seu cadastro foi concluído com sucesso!",
-      );
+      cadastrar();
     } else if (!_aceitouTermos) {
       _mostrarDialogo("Erro", "Você deve aceitar os termos para continuar.");
     }
@@ -95,8 +121,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _buildTextField("Nome", nomeController),
-                  _buildTextField("Sobrenome", sobrenomeController),
+                  _buildTextField("Nome Completo", nomeController),
+                  _buildTextField("Telefone", telefoneController),
                   _buildTextField(
                     "Digite seu E-mail",
                     emailController,
@@ -173,7 +199,7 @@ Esta política pode ser atualizada ocasionalmente. Alterações relevantes serã
 Para dúvidas ou informações sobre esta Política, entre em contato:
 📧 suporte@vuca.com
 
-Termos de Uso – VUCA
+Termos de Uso VUCA
 
 1. Sobre o serviço
 O VUCA é um aplicativo que fornece estimativas de valores para corridas em apps de transporte. Não oferecemos transporte diretamente nem temos vínculos com plataformas de mobilidade.
@@ -218,12 +244,7 @@ Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisd
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildButton("Voltar", Colors.black, Colors.white, () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TelaBoasVindas(),
-                          ),
-                        );
+                        irParaTelaInicial();
                       }),
                       _buildButton(
                         "Confirmar",
@@ -336,7 +357,18 @@ Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisd
     );
   }
 
-  void handlePostCadastro() async{
-    final response = await postCadastro();
+  void irParaTelaInicial() async {
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TelaBoasVindas()),
+    );
+    //}else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
   }
 }

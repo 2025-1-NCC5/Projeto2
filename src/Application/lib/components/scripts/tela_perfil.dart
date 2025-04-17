@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TelaPerfil extends StatelessWidget {
+class TelaPerfil extends StatefulWidget {
+  final String token;
+  const TelaPerfil({super.key,required this.token});
+
+  @override
+  State<TelaPerfil> createState() => _TelaPerfilState();
+}
+
+class _TelaPerfilState extends State<TelaPerfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

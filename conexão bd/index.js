@@ -1,9 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const pool = require('./bd');
 const app = express();
 const AWS = require('aws-sdk');
+const jwt =  require('jsonwebtoken');
 require('dotenv').config();
+const secretKey = process.env.JWT_SECRET;
 
+app.use(cors());
 app.use(express.json());
 
 const ses = new AWS.SES({
@@ -12,11 +16,51 @@ const ses = new AWS.SES({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
+
+app.post('/gerarToken', async (req,res) => {
+  const {email, senha} = req.body;
+  if(email == 'teste' && senha == 'teste'){
+    const payload = {email : email};
+    const token = jwt.sign(payload, secretKey, {expiresIn: '15s'});
+    res.json({token});
+  }else{
+    return null;
+  }
+})
+
+app.post('/verificarToken', async (req,res) => {
+  const {token} = req.body;
+  try{
+    const decoded = jwt.verify(token,secretKey);
+    // email = decoded["email"];
+    // console.log(email)
+    res.status(200).json({
+      valido:true,
+      mensagem:decoded
+    })
+  }catch(error){
+    if( error.name === 'TokenExpiredError'){
+      res.status(401).json({
+        valido:false,
+        mensagem:"Token expirou, favor fazer login"
+      })
+    }else{
+      res.status(401).json()({
+        valido:false,
+        mensagem:"Token inválido, favor fazer login"
+      })
+    }
+  }
+})
+
+
 app.get('/acessarBancoDados', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT * FROM database-vuca'
+      'SELECT * FROM ride_v2 limit 10'
+      
     );
+    res.status(200).json({mensagem: "Consulta feita com sucesso!", usuario: result.rows})
   } catch (error) {
     console.error("Erro ao buscar usuário:", error);
     res.status(500).send("Erro no servidor.");
@@ -49,7 +93,7 @@ app.post('/cadastrar', async (req, res) => {
       [email]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({ mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
+      res.status(200).json({sucesso: true, mensagem: "E-mail já cadastrado!", usuario: result.rows[0]});
     } else {
       try{
         await pool.query(
@@ -59,7 +103,7 @@ app.post('/cadastrar', async (req, res) => {
         res.status(201).json(result.rows[0]);
       }catch (error){
         console.error("Erro ao cadastrar usuário:", error);
-        res.status(500).send("Erro no servidor.");
+        res.status(500).send({sucesso: false, mensagem: "Erro no servidor."});
       }
     }
   } catch{
@@ -67,7 +111,7 @@ app.post('/cadastrar', async (req, res) => {
   }
 });
 
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const {email, senha} = req.body;
   try {
     const result = await pool.query(
@@ -75,9 +119,11 @@ app.get('/login', async (req, res) => {
       [email, senha]
     );
     if (result.rows.length > 0) {
-      res.status(200).json({ mensagem: "Login realizado com sucesso!", usuario: result.rows[0]});
+      const payload = {email : email};
+      const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+      res.status(200).json({ sucesso: true,  mensagem: "Login realizado com sucesso!", token: token});
     } else {
-      res.status(401).json({ mensagem: "Email ou senha inválidos." });
+      res.status(401).json({ sucesso: false, mensagem: "Email ou senha inválidos." });
     }
   } catch (error) {
     console.error("Erro ao fazer login:", error);
