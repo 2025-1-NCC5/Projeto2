@@ -29,6 +29,7 @@ app.post('/gerarToken', async (req,res) => {
   }
 })
 
+
 app.post('/verificarToken', async (req,res) => {
   const {token} = req.body;
   try{
@@ -229,6 +230,7 @@ app.post('/recover-password', async (req, res) => {
     if (result.rows.length == 0) {
       return res.status(404).json({ message: 'E-mail não encontrado.' });
     } else {
+      const token = jwt.sign(payload, secretKey, {expiresIn: '5m'});
       try {
         var transporter = nodemailer.createTransport({
           host: "smtp.gmail.com",
@@ -244,8 +246,7 @@ app.post('/recover-password', async (req, res) => {
           from: 'VUCA <startup.vuca@gmail.com>',
           to: email,
           subject: 'Recuperação de Senha',
-          html: '<h1>Link para recuperação de senha: </h1> <link>https://lambent-pavlova-f28d99.netlify.app</link>',
-          text: 'Link para recuperação de senha: https://lambent-pavlova-f28d99.netlify.app',
+          text: 'Link para recuperação de senha: https://not-reply-recuperar-senha.netlify.app/' + token,
         });
       } catch (error) {
         console.error('Erro ao enviar email de recuperação:', error);
