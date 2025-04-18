@@ -230,6 +230,7 @@ app.post('/recover-password', async (req, res) => {
     if (result.rows.length == 0) {
       return res.status(404).json({ message: 'E-mail não encontrado.' });
     } else {
+      const payload = {email : email};
       const token = jwt.sign(payload, secretKey, {expiresIn: '5m'});
       try {
         var transporter = nodemailer.createTransport({
@@ -246,10 +247,10 @@ app.post('/recover-password', async (req, res) => {
           from: 'VUCA <startup.vuca@gmail.com>',
           to: email,
           subject: 'Recuperação de Senha',
-          text: 'Link para recuperação de senha: https://not-reply-recuperar-senha.netlify.app/' + token,
+          text: 'Token para recuperação de senha: ' + token,
         });
       } catch (error) {
-        console.error('Erro ao enviar email de recuperação:', error);
+        console.error('Erro ao enviar token de recuperação:', error);
         res.status(500).json({ message: 'Erro interno do servidor.' });
       }
 
@@ -261,10 +262,16 @@ app.post('/recover-password', async (req, res) => {
 });
 
 app.post('/modificaçãoRecuperaçãoSenha', async (req, res) => {
-  const { email, senha } = req.body;
+  const { token, email, senha } = req.body;
 
   try {
+    const decoded = jwt.verify(token, secretKey);
+
+    if (decoded.email !== email) {
+      return res.status(401).json({ mensagem: "Token inválido!" });
+    }
     const [rows] = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
+
     if (result.rows.length > 0) {
       try {
         await pool.query(
