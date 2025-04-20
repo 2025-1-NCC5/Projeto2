@@ -95,5 +95,25 @@ class Usuarios {
       print('Failed to create user: ${response.statusCode}');
       return null;
     }
+  }
+
+  static Future<Map<String, dynamic>?> simularCorrida(String origem, String destino) async {
+      var logger = Logger();
+      
+      var response = await TiposConexoes.post("calcularCorrida",{
+        'origem': origem,
+        'destino' : destino,
+      });
+      logger.i(origem);
+      logger.i(destino);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else if(response.statusCode == 401) {
+        print('Falha ao simular corrida: ${response.statusCode}');
+        return jsonDecode(response.body);
+      } else{
+        return null;
+      }
   } 
 }

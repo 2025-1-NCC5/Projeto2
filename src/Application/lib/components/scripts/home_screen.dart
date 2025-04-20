@@ -203,7 +203,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Botão "Calcular Corrida"
                 ElevatedButton(
-                  onPressed: () => irParaOrcamento(),  
+                  onPressed: (){
+                    irParaOrcamento(); 
+                    simularCorrida(pickupController.text, destinationController.text);
+                  }, 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0XFF416383),
                     foregroundColor: Color(0XFFD9D9D9),
@@ -276,5 +279,20 @@ class _HomeScreenState extends State<HomeScreen> {
         (Route<dynamic> route) => false,
       );
     }
+  }
+
+  void simularCorrida(String origem, String destino) async {
+      final response = await Usuarios.simularCorrida(origem, destino);
+      if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
   }
 }
