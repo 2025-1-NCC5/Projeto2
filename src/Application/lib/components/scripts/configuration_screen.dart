@@ -4,7 +4,6 @@ import 'package:flutter_application_2/components/scripts/login_screen.dart';
 import './home_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
 import './tela_perfil.dart';
-import 'package:logger/logger.dart';
 
 class ConfigurationScreen extends StatefulWidget {
    final String token;
@@ -1048,14 +1047,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   }
 
   void alterarSenha(token, senha, novaSenha) async {
-    var logger = Logger();
     final tokenVerificado = await Usuarios.verificarToken(token);
-    logger.d(tokenVerificado);
     if(tokenVerificado != null && tokenVerificado["valido"] == true){
       String email =  tokenVerificado["mensagem"]["email"];
-      logger.d(email);
       final response = await Usuarios.alterarSenha(email ,senha, novaSenha);
-      logger.d(response);
       if (!mounted) return;
       if(response != null && response["sucesso"] == true){
         Navigator.pop(context);
