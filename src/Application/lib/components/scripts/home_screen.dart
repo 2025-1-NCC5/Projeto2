@@ -246,12 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void irParaOrcamento() async {
     // Navigator.pop(context); // Fecha o popup
-    Logger logger = Logger();
-
-    
-
     final response = await Usuarios.verificarToken(widget.token);
-    logger.d(response);
 
     if(response != null && response["valido"] == true){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -265,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialPageRoute(builder: (context) => OrcamentoScreen()),
       );
     }else{
-      String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
+      String errorMessage = response?['mensagem'] ?? 'Algo deu errado, favor reiniciar!';
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(errorMessage)),
