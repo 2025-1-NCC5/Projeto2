@@ -6,7 +6,8 @@ class TiposConexoes {
   // static const String baseUrl = 'http://10.0.2.2:3000';
   // static const String baseUrl = 'http://localhost:3000';
   // static const String baseUrl = 'http://127.0.0.1:3000';
-  static const String baseUrl = 'https://xw7kkz-3000.csb.app';
+  static const String baseUrl = 'https://mmx65s-3000.csb.app';
+  
 
   static Future<http.Response> post(String endpoint, Map<String, dynamic> data) async {
 
