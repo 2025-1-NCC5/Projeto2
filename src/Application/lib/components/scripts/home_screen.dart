@@ -204,8 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Botão "Calcular Corrida"
                 ElevatedButton(
                   onPressed: (){
-                    irParaOrcamento(); 
-                    simularCorrida(pickupController.text, destinationController.text);
+                    simularCorrida(pickupController.text, destinationController.text); 
                   }, 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0XFF416383),
@@ -277,16 +276,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void simularCorrida(String origem, String destino) async {
-      final response = await Usuarios.simularCorrida(origem, destino);
-      if(response != null && response["sucesso"] == true){
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TelaLogin()),
-        );
-      }else{
-        String errorMessage = response?['message'] ?? 'Something went wrong!';
+      final tokenVerificado = await Usuarios.verificarToken(widget.token);
+
+      if(tokenVerificado != null && tokenVerificado["valido"] == true){
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Request failed: ${errorMessage}')),
+          SnackBar(content: Text("Calculando corrida...")),
+        );
+
+        final response = await Usuarios.simularCorrida(origem, destino);
+
+        if(response != null && response["sucesso"] == true){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrcamentoScreen()),
+        );
+        }else{
+          String errorMessage = response?['message'] ?? 'Tente Novamente';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Request failed: ${errorMessage}')),
+          );
+        }
+      }else{
+
+        String errorMessage = tokenVerificado?['mensagem'] ?? 'Favor, logar novamente.';
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => TelaLogin()),
+          (Route<dynamic> route) => false,
         );
       }
   }
