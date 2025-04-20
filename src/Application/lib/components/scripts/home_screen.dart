@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:logger/web.dart';
 import './configuration_screen.dart';
 import './orcamento_screen.dart';
+import '../conexao_endpoints/usuarios.dart';
+import './login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String token;
+  const HomeScreen({super.key, required this.token});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -199,7 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Botão "Calcular Corrida"
                 ElevatedButton(
-                  onPressed: () => irParaOrcamento(),  
+                  onPressed: (){
+                    simularCorrida(pickupController.text, destinationController.text); 
+                  }, 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0XFF416383),
                     foregroundColor: Color(0XFFD9D9D9),
@@ -230,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //if(response != null && response["sucesso"] == true){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ConfigurationScreen()),
+        MaterialPageRoute(builder: (context) => ConfigurationScreen(token : widget.token)),
       );
     //}else{
         //String errorMessage = response?['message'] ?? 'Something went wrong!';
@@ -241,21 +247,73 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void irParaOrcamento() async {
-    Navigator.pop(context); // Fecha o popup
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Calculando corrida...")),
-    );
-    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-    //if(response != null && response["sucesso"] == true){
+    // Navigator.pop(context); // Fecha o popup
+    Logger logger = Logger();
+
+    
+
+    final response = await Usuarios.verificarToken(widget.token);
+    logger.d(response);
+
+    if(response != null && response["valido"] == true){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Calculando corrida...")),
+      );
+
+      //TODO: Fazer a conexão com a API de previsão
+      
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => OrcamentoScreen()),
       );
-    //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-    //}
+    }else{
+      String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
+  void simularCorrida(String origem, String destino) async {
+      final tokenVerificado = await Usuarios.verificarToken(widget.token);
+
+      if(tokenVerificado != null && tokenVerificado["valido"] == true){
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Calculando corrida...")),
+        );
+
+        final response = await Usuarios.simularCorrida(origem, destino);
+
+        if(response != null && response["sucesso"] == true){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrcamentoScreen()),
+        );
+        }else{
+          String errorMessage = response?['message'] ?? 'Tente Novamente';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Request failed: ${errorMessage}')),
+          );
+        }
+      }else{
+
+        String errorMessage = tokenVerificado?['mensagem'] ?? 'Favor, logar novamente.';
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => TelaLogin()),
+          (Route<dynamic> route) => false,
+        );
+      }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../conexao_endpoints/usuarios.dart';
 
 class OrcamentoScreen extends StatefulWidget {
   const OrcamentoScreen({super.key});
@@ -29,13 +30,13 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
-                    'assets/btn_retornar.svg',
+                    'btn_retornar.svg',
                     height: 28,
                     width: 28,
                   ),
-                  SvgPicture.asset('assets/txt_logo.svg', height: 40),
+                  SvgPicture.asset('txt_logo.svg', height: 40),
                   SvgPicture.asset(
-                    'assets/btn_configuracoes.svg',
+                    'btn_configuracoes.svg',
                     height: 28,
                     width: 28,
                   ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../conexao_endpoints/usuarios.dart';
+import './login_screen.dart';
 
 class TelaRecuperacaoSenha extends StatefulWidget {
   const TelaRecuperacaoSenha({super.key});
@@ -9,7 +11,20 @@ class TelaRecuperacaoSenha extends StatefulWidget {
 
 class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
   final TextEditingController emailController = TextEditingController();
-  
+  void emailRecuperacao() async {
+      final response = await Usuarios.mandarEmailRecuperacaoDeSenha(emailController.text);
+      if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,18 +85,11 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                       ),
                     ),
                     onPressed: () {
-                      // Simulação de envio de e-mail
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Instruções enviadas para o e-mail informado.",
-                          ),
-                        ),
-                      );
+                      emailRecuperacao();
                     },
                     child: const Text(
                       "Enviar",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white)
                     ),
                   ),
                 ],
