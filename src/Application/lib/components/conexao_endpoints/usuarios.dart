@@ -53,5 +53,66 @@ class Usuarios {
       } else{
         return null;
       }
+<<<<<<< Updated upstream
   }  
+=======
+  } 
+
+  static Future<Map<String, dynamic>?> mandarEmailRecuperacaoDeSenha(String email) async {
+    var logger = Logger();
+    var response = await TiposConexoes.post('recover-password', {
+      'email': email,
+    });
+
+    logger.i("Início da Chamada POST - Recuperação de Senha");
+    logger.i(response.body);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      print('Failed to create user: ${response.statusCode}');
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> simularCorrida(String origem, String destino) async {
+      var logger = Logger();
+      
+      var response = await TiposConexoes.post("calcularCorrida",{
+        'origem': origem,
+        'destino' : destino,
+      });
+      logger.i(origem);
+      logger.i(destino);
+
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else if(response.statusCode == 401) {
+        print('Falha ao simular corrida: ${response.statusCode}');
+        return jsonDecode(response.body);
+      } else{
+        return null;
+      }
+  } 
+
+  static Future<Map<String, dynamic>?> alterarSenha(String email, String senhaAntiga, String senhaNova) async {
+      var logger = Logger();
+      
+      var response = await TiposConexoes.put("alterarSenha",{
+        'email': email,
+        'senhaAntiga' : senhaAntiga,
+        'senhaNova' : senhaNova,
+      });
+      logger.d("Retorno APi $response");
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body);
+      }else if (response.statusCode == 401){
+        return jsonDecode(response.body);
+      }else{
+        return null;
+      }
+  } 
+
+  
+>>>>>>> Stashed changes
 }

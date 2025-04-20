@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import './home_screen.dart';
 import './tela_perfil.dart';
+import 'package:logger/logger.dart';
 
 class ConfigurationScreen extends StatefulWidget {
   const ConfigurationScreen({super.key});
@@ -529,13 +530,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
-                            // Fechar popup e salvar senha
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Senha alterada com sucesso!"),
-                              ),
-                            );
+                            alterarSenha(widget.token, currentPasswordController.text, confirmPasswordController.text);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -1038,4 +1033,43 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
         //);
       //}
   }
+
+  void alterarSenha(token, senha, novaSenha) async {
+    var logger = Logger();
+    final tokenVerificado = await Usuarios.verificarToken(token);
+    logger.d(tokenVerificado);
+    if(tokenVerificado != null && tokenVerificado["valido"] == true){
+      String email =  tokenVerificado["mensagem"]["email"];
+      logger.d(email);
+      final response = await Usuarios.alterarSenha(email ,senha, novaSenha);
+      logger.d(response);
+      if (!mounted) return;
+      if(response != null && response["sucesso"] == true){
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Senha alterada com sucesso!"),
+          ),
+        );
+      }else if(response != null && response["mensagem"] == "Senha inválida."){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response["mensagem"]),
+            ),
+          );
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erro ao alterar senha, tente novamente"),
+          ),
+        );
+      }
+    }else{
+      String errorMessage = tokenVerificado?['message'] ?? 'Algo deu errado, tente novamente!';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request failed: ${errorMessage}')),
+      );
+    }
+  }
 }
+

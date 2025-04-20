@@ -24,4 +24,14 @@ class TiposConexoes {
       headers: {'Content-Type': 'application/json'},
     );
   }
+
+  static Future<http.Response> put(String endpoint, Map<String, dynamic> data) async {
+
+    var url = Uri.parse('$baseUrl/$endpoint');
+    return await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+  }
 }
