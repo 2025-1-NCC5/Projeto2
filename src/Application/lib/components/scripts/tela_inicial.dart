@@ -11,8 +11,7 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
   @override
   void initState() {
     super.initState();
-    // Aguarda 4 segundos e vai para a próxima tela
-    Timer(Duration(seconds: 6), () {
+    Timer(Duration(seconds: 4), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => TelaLogin()),
@@ -23,15 +22,14 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // opcional
+      backgroundColor: Colors.black,
       body: Center(
-        child: SizedBox.expand(
-          child: FittedBox(
-            fit: BoxFit.cover, // ou .contain, .fitWidth etc
-            child: Image.asset(
-              'assets/web/vinheta.gif',
-            ),
-          ),
+        child: Image.asset(
+          'assets/vinheta.gif',
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          fit: BoxFit.cover, // ou contain, se quiser ver tudo
+          gaplessPlayback: true, // <- evita o "flash" de transição
         ),
       ),
     );
