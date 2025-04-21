@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_application_2/components/scripts/login_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import './tela_inicial.dart';
@@ -74,6 +75,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
     );
   }
 
+  void _abrirTermos() async {
+    final Uri url = Uri.parse('https://termoscondicoesvuca.vercel.app');
+
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      _mostrarDialogo("Erro", "Não foi possível abrir o site dos Termos de Uso.");
+    }
+  }
+
   void _selecionarData() async {
     DateTime? dataSelecionada = await showDatePicker(
       context: context,
@@ -85,16 +96,21 @@ class _TelaCadastroState extends State<TelaCadastro> {
     if (dataSelecionada != null) {
       setState(() {
         dataNascimentoController.text =
-            "${dataSelecionada.day}-${dataSelecionada.month}-${dataSelecionada.year}";
+          "${dataSelecionada.day}-${dataSelecionada.month}-${dataSelecionada.year}";
       });
     }
   }
 
   void _confirmarCadastro() {
-    if (_formKey.currentState!.validate() && _aceitouTermos) {
-      cadastrar();
-    } else if (!_aceitouTermos) {
+    if (!_aceitouTermos) {
       _mostrarDialogo("Erro", "Você deve aceitar os termos para continuar.");
+      return;
+    }
+
+    if (_formKey.currentState!.validate()) {
+      cadastrar();
+    } else {
+      _mostrarDialogo("Erro", "Preencha todos os campos corretamente.");
     }
   }
 
@@ -102,6 +118,18 @@ class _TelaCadastroState extends State<TelaCadastro> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFCCDBFF),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xFFCCDBFF),
+        title: Stack(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: SvgPicture.asset('assets/txt_logo.svg'),
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -111,15 +139,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Center(
-                    child: Text(
-                      "VUCA",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 20),
                   _buildTextField("Nome Completo", nomeController),
                   _buildTextField("Telefone", telefoneController),
@@ -156,77 +175,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap:
-                              () => _mostrarDialogo(
-                                "Política de Privacidade e Termos de Uso – VUCA",
-                                '''Política de Privacidade – VUCA
-
-1. Compromisso com a sua privacidade
-A sua privacidade é importante para nós. O VUCA respeita a sua privacidade em relação a qualquer informação pessoal que possamos coletar em nosso aplicativo e site.
-
-2. Coleta de dados
-Coletamos apenas as informações estritamente necessárias para oferecer um melhor serviço. Isso é feito de forma justa, legal e com o seu consentimento. Os dados coletados incluem:
-- Localização (se autorizada pelo usuário);
-- Preferências de uso do aplicativo;
-- Informações sobre o dispositivo;
-- Cookies e tecnologias similares para melhorar a experiência.
-
-3. Finalidade dos dados
-As informações coletadas são utilizadas para:
-- Personalizar estimativas de valores de corridas;
-- Melhorar a precisão e qualidade do serviço;
-- Garantir a segurança da plataforma e dos usuários;
-- Análise de dados para aperfeiçoamento contínuo do sistema.
-
-4. Armazenamento e segurança
-Os dados são mantidos somente pelo tempo necessário para prestar os serviços. Adotamos medidas rigorosas de segurança para evitar acesso não autorizado, perda ou roubo das informações.
-
-5. Compartilhamento de informações
-Não compartilhamos informações pessoais publicamente ou com terceiros, exceto quando exigido por lei. Podemos compartilhar dados com:
-- Serviços de mapas e geolocalização;
-- Plataformas de análise para melhoria contínua.
-
-6. Responsabilidade do usuário
-Ao utilizar o VUCA, o usuário concorda em:
-- Não se envolver em atividades ilegais ou contrárias à ordem pública;
-- Não disseminar conteúdo ofensivo, racista, xenofóbico ou ilegal;
-- Não causar danos aos sistemas da VUCA nem distribuir vírus.
-
-7. Atualizações
-Esta política pode ser atualizada ocasionalmente. Alterações relevantes serão comunicadas via aplicativo ou canais oficiais.
-
-8. Contato
-Para dúvidas ou informações sobre esta Política, entre em contato:
-📧 suporte@vuca.com
-
-Termos de Uso VUCA
-
-1. Sobre o serviço
-O VUCA é um aplicativo que fornece estimativas de valores para corridas em apps de transporte. Não oferecemos transporte diretamente nem temos vínculos com plataformas de mobilidade.
-
-2. Licença de uso
-Você tem permissão para utilizar os materiais do VUCA apenas para fins pessoais e não comerciais. É proibido:
-- Modificar ou copiar o conteúdo;
-- Usar o conteúdo para fins comerciais ou públicos;
-- Fazer engenharia reversa do software;
-- Remover avisos de direitos autorais.
-
-O descumprimento de qualquer uma dessas regras implica a revogação imediata da licença.
-
-3. Limitação de responsabilidade
-As informações fornecidas são apresentadas “como estão”. Não garantimos total precisão nos valores estimados e não nos responsabilizamos por divergências.
-
-4. Links externos
-O VUCA pode conter links para sites de terceiros, sobre os quais não temos controle. Não nos responsabilizamos pelas práticas desses sites.
-
-5. Alterações nos termos
-Podemos atualizar estes Termos a qualquer momento. O uso contínuo do aplicativo implica aceitação das alterações.
-
-6. Legislação aplicável
-Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisdição exclusiva dos tribunais brasileiros.
-
-📅 Data de vigência: 22 de março de 2025''',
-                              ),
+                          onTap: _abrirTermos,
                           child: const Text(
                             "Ao continuar, você concorda com nossa Política de Privacidade e os Termos de Uso",
                             style: TextStyle(
@@ -243,13 +192,13 @@ Estes termos são regidos pelas leis do Brasil. O usuário concorda com a jurisd
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildButton("Voltar", Colors.black, Colors.white, () {
+                      _buildButton("Voltar", Color(0xff223148), Color(0XFFD9D9D9), () {
                         irParaTelaInicial();
                       }),
                       _buildButton(
                         "Confirmar",
-                        Colors.black,
-                        Colors.white,
+                        Color(0xff223148),
+                        Color(0XFFD9D9D9),
                         _confirmarCadastro,
                       ),
                     ],

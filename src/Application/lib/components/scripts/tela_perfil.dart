@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TelaPerfil extends StatefulWidget {
   final String token;
@@ -12,22 +13,24 @@ class _TelaPerfilState extends State<TelaPerfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFD6E4FF),
+      backgroundColor: Color(0xFFCCDBFF),
       appBar: AppBar(
-        backgroundColor: Color(0xFFD6E4FF),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
-        title: Text(
-          'VUCA',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xFFCCDBFF),
+        title: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SvgPicture.asset('assets/txt_logo.svg'),
+            ),
+            Positioned(
+              left: 0,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Color(0XFF121212)),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            )
+          ],
         ),
       ),
       body: Center(
@@ -53,28 +56,6 @@ class _TelaPerfilState extends State<TelaPerfil> {
               _buildOption(Icons.location_on, "Localizações salvas"),
               Divider(color: Color(0xFFA3A3A3)),
               SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
-                    ),
-                    child: Text(
-                      "Deletar conta",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

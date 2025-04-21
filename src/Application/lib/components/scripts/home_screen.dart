@@ -264,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
       
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => OrcamentoScreen()),
+        MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token)),
       );
     }else{
       String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
@@ -294,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if(response != null && response["sucesso"] == true){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => OrcamentoScreen()),
+            MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token)),
         );
         }else{
           String errorMessage = response?['message'] ?? 'Tente Novamente';

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/scripts/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import './tela_cadastro.dart';
 import './esquecue_senha.dart';
-import './home_screen.dart';
+//import './home_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
-import 'package:logger/logger.dart';
+//import 'package:logger/logger.dart';
 
 
 class TelaLogin extends StatefulWidget {
@@ -80,6 +81,18 @@ class _TelaLoginState extends State<TelaLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFCCDBFF),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xFFCCDBFF),
+        title: Stack(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: SvgPicture.asset('assets/txt_logo.svg'),
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -93,9 +106,8 @@ class _TelaLoginState extends State<TelaLogin> {
             children: [
               const SizedBox(height: 20),
               const Text(
-                "Faça login para continuar\ntransformando ideias em realidade.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                "Faça login para continuar transformando ideias em realidade.",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Poppins', color: Color(0XFF121212),),
               ),
               const SizedBox(height: 20),
               TextField(
@@ -106,7 +118,7 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
                   labelText: 'E-mail',
                   filled: true,
-                  fillColor: const Color(0xFFA3A3A3),
+                  fillColor: Colors.white,
                 ),
               ),
               const SizedBox(height: 10),
@@ -119,10 +131,11 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
                   labelText: 'Senha',
                   filled: true,
-                  fillColor: const Color(0xFFA3A3A3),
+                  fillColor: Colors.white,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _senhaVisivel ? Icons.visibility : Icons.visibility_off,
+                      color: Color(0xFF223148),
                     ),
                     onPressed: () {
                       setState(() {
@@ -137,11 +150,11 @@ class _TelaLoginState extends State<TelaLogin> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => irParaEsqueceuSenha(),
-                  child: const Text("Esqueceu sua senha?"),
+                  child: const Text("Esqueceu sua senha?", style: TextStyle(fontFamily: 'Poppins', fontSize: 12, fontWeight: FontWeight.w400, color: Color(0XFF262626)),),
                 ),
               ),
-              const Divider(),
-              const Text("OU"),
+              const SizedBox(height: 10),
+              const Text("OU", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, fontWeight: FontWeight.w400, color: Color(0XFF121212)),),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -165,22 +178,23 @@ class _TelaLoginState extends State<TelaLogin> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Color(0xff223148),
+                      foregroundColor: Color(0XFFD9D9D9),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                   onPressed: () => login(),
                   child: const Text(
                     "Confirmar",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () => irParaCadastro(),
-                child: const Text("Não tem uma conta? Cadastrar"),
+                child: const Text("Não tem uma conta? Cadastrar", style: TextStyle(fontFamily: 'Poppins', fontSize: 12, fontWeight: FontWeight.w400, color: Color(0XFF262626)),),
               ),
               const SizedBox(height: 20),
             ],

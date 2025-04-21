@@ -26,22 +26,23 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
                 'Bem-vindo de volta',
                 style: TextStyle(
                   fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  color: Color(0XFF121212),
                 ),
               ),
               const SizedBox(height: 30),
-              _buildButton("ENTRAR", Colors.black, Colors.white, () {
+              _buildButton("ENTRAR", Color(0xff223148), Color(0XFFD9D9D9), () {
                 irParaLogin();
               }),
               const SizedBox(height: 15),
-              _buildButton("CADASTRAR", Colors.white, Colors.black, () {
+              _buildButton("CADASTRAR", Colors.white, Color(0XFF121212), () {
                 irParaCadastro();
               }),
               const SizedBox(height: 40),
               const Text(
                 'Entrar com Rede Social',
-                style: TextStyle(fontSize: 17, color: Colors.black),
+                style: TextStyle(fontSize: 17, fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: Color(0XFF262626)),
               ),
               const SizedBox(height: 12),
               // const Image(image: AssetImage('assets/social.png'), height: 50),
@@ -66,7 +67,7 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
           backgroundColor: bgColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
-            side: BorderSide(color: Colors.black),
+            side: BorderSide(color: Color(0XFF121212)),
           ),
         ),
         onPressed: onTap,
@@ -74,7 +75,8 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
           text,
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
             color: textColor,
           ),
         ),
