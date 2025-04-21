@@ -246,40 +246,6 @@ class _HomeScreenState extends State<HomeScreen> {
     //}
   }
 
-  void irParaOrcamento() async {
-    // Navigator.pop(context); // Fecha o popup
-    Logger logger = Logger();
-
-    
-
-    final response = await Usuarios.verificarToken(widget.token);
-    logger.d(response);
-
-    if(response != null && response["valido"] == true){
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Calculando corrida...")),
-      );
-
-      //TODO: Fazer a conexão com a API de previsão
-      
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token)),
-      );
-    }else{
-      String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => TelaLogin()),
-        (Route<dynamic> route) => false,
-      );
-    }
-  }
-
   void simularCorrida(String origem, String destino) async {
       final tokenVerificado = await Usuarios.verificarToken(widget.token);
 
@@ -294,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if(response != null && response["sucesso"] == true){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token)),
+            MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token, respostaSimulacao : response)),
         );
         }else{
           String errorMessage = response?['message'] ?? 'Tente Novamente';

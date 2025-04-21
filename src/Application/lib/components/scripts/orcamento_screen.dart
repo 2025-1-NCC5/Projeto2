@@ -1,58 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:logger/logger.dart';
 //import '../conexao_endpoints/usuarios.dart';
 import './home_screen.dart';
 
 class OrcamentoScreen extends StatefulWidget {
   final String token;
-  const OrcamentoScreen({super.key, required this.token});
+  final Map<String, dynamic> respostaSimulacao;
+  const OrcamentoScreen({super.key, required this.token, required this.respostaSimulacao });
 
   @override
   State<OrcamentoScreen> createState() => _OrcamentoScreenState();
 }
 
 class _OrcamentoScreenState extends State<OrcamentoScreen> {
+  var logger = Logger();
   final Color backgroundColor = Color(0xFFCCDBFF);
   final Color cardColor = Color(0xFF223148);
-
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFCCDBFF),
-        title: Stack(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                onPressed: () => irParaHome(),
-                icon: SvgPicture.asset('assets/grp_returner.svg'),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 30),
+    logger.i(widget.respostaSimulacao);
+    final predictions = widget.respostaSimulacao['data'] as Map<String, dynamic>;
+    final entries = predictions.entries.toList()
+  ..sort((a, b) => (a.value as double).compareTo(b.value as double));
+    final menorPreco = entries.map((e) => e.value).reduce((a, b) => a < b ? a : b);
 
-            // CARD RECOMENDADO
-            buildCard(recomendado: true, titulo: '99pop', preco: '\$22'),
-            SizedBox(height: 12),
-            buildCard(titulo: 'UberX', preco: '\$29'),
-            SizedBox(height: 12),
-            buildCard(titulo: 'Táxi', preco: '\$33'),
-            SizedBox(height: 12),
-            buildCard(titulo: '99top', preco: '\$45'),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: const Color(0xFF121212), // fundo escuro, opcional
+      appBar: AppBar(title: Text("Corridas Simuladas")),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        itemCount: entries.length,
+        itemBuilder: (context, index) {
+          final entry = entries[index];
+          final preco = (entry.value as double).toStringAsFixed(2);
+          final bool isRecomendado = entry.value == menorPreco;
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: buildCard(
+              titulo: entry.key,
+              preco: "R\$ $preco",
+              recomendado: isRecomendado,
+            ),
+          );
+        },
       ),
     );
   }
@@ -100,7 +93,7 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
                         fontFamily: 'Poppins',
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontSize: 10,
                       ),
                     ),
                   Text(
@@ -109,7 +102,7 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
                       fontFamily: 'Poppins',
                       color: Color(0XFFD9D9D9),
                       fontWeight: FontWeight.w400,
-                      fontSize: 25,
+                      fontSize: 15,
                     ),
                   ),
                 ],
