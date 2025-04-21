@@ -11,7 +11,7 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 4), () {
+    Timer(Duration(seconds: 6), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => TelaLogin()),
@@ -25,11 +25,11 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
       backgroundColor: Colors.black,
       body: Center(
         child: Image.asset(
-          'assets/vinheta.gif',
+          'assets/web/vinheta.gif',
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          fit: BoxFit.cover, // ou contain, se quiser ver tudo
-          gaplessPlayback: true, // <- evita o "flash" de transição
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
         ),
       ),
     );
