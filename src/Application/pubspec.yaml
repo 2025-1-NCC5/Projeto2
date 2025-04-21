@@ -28,7 +28,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/vinheta.mp4
+    - assets/web/vinheta.gif
+    - assets/web/vinheta.mp4
     - assets/txt_logo.svg
     - assets/grp_returner.svg
     - assets/img_perfil.svg
