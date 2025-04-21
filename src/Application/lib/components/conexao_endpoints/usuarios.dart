@@ -108,6 +108,8 @@ class Usuarios {
       logger.i(destino);
 
       if (response.statusCode == 201) {
+        logger.i("Simulações: ");
+        logger.i(response.body);
         return jsonDecode(response.body);
       } else if(response.statusCode == 401) {
         print('Falha ao simular corrida: ${response.statusCode}');

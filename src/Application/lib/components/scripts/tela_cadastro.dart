@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import './tela_inicial.dart';
@@ -79,7 +79,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     final Uri url = Uri.parse('https://termoscondicoesvuca.vercel.app');
 
     try {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+      // await launchUrl(url, mode: LaunchMode.externalApplication);
     } catch (e) {
       _mostrarDialogo("Erro", "Não foi possível abrir o site dos Termos de Uso.");
     }
