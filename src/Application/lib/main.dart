@@ -6,7 +6,10 @@ import 'components/scripts/tela_inicial.dart';
 //import 'components/scripts/tela_cadastro.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: TelaBoasVindas(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

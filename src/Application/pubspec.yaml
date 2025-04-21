@@ -17,6 +17,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   http: ^1.3.0
   logger: ^2.5.0
+  video_player: ^2.7.2
 
 dev_dependencies:
   flutter_test:
@@ -27,6 +28,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/vinheta.mp4
     - assets/txt_logo.svg
     - assets/grp_returner.svg
     - assets/img_perfil.svg
