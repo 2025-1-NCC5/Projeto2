@@ -978,7 +978,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             // Botão Cancelar
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context); // Fecha o popup
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xff223148),
@@ -997,7 +997,11 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             // Botão Sair
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context); // Fecha o popup
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TelaLogin()),
+                ); // Fecha o popup // Fecha o popup
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text("Você saiu da conta!")));
