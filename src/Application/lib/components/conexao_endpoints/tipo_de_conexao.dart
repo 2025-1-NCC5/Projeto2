@@ -4,8 +4,10 @@ import 'package:logger/logger.dart';
 
 class TiposConexoes {
   // static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String baseUrl = 'http://localhost:3000';
+  // static const String baseUrl = 'http://localhost:3000';
   // static const String baseUrl = 'http://127.0.0.1:3000';
+  static const String baseUrl = 'https://mmx65s-3001.csb.app';
+  
 
   static Future<http.Response> post(String endpoint, Map<String, dynamic> data) async {
 
@@ -22,6 +24,16 @@ class TiposConexoes {
     return await http.get(
       url,
       headers: {'Content-Type': 'application/json'},
+    );
+  }
+
+  static Future<http.Response> put(String endpoint, Map<String, dynamic> data) async {
+
+    var url = Uri.parse('$baseUrl/$endpoint');
+    return await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
     );
   }
 }

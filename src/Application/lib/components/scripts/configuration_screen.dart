@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_application_2/components/scripts/login_screen.dart';
 import './home_screen.dart';
+import '../conexao_endpoints/usuarios.dart';
 import './tela_perfil.dart';
 
 class ConfigurationScreen extends StatefulWidget {
@@ -12,6 +14,20 @@ class ConfigurationScreen extends StatefulWidget {
 }
 
 class _ConfigurationScreenState extends State<ConfigurationScreen> {
+  void excluirConta(String email, String senha) async {
+      final response = await Usuarios.excluirConta(email, senha);
+      if(response != null && response["sucesso"] == true){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        );
+      }else{
+        String errorMessage = response?['message'] ?? 'Something went wrong!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
+        );
+      }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -530,13 +546,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
-                            // Fechar popup e salvar senha
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Senha alterada com sucesso!"),
-                              ),
-                            );
+                            alterarSenha(widget.token, currentPasswordController.text, confirmPasswordController.text);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -880,7 +890,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
                         ),
                       ),
-
+                      
                       // Botão Excluir Conta
                       ElevatedButton(
                         onPressed: () {
@@ -902,13 +912,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
+                            excluirConta(emailController.text, passwordController.text);
                             // Fechar popup e confirmar exclusão da conta
                             Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Conta excluída com sucesso!"),
-                              ),
-                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -966,7 +972,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             // Botão Cancelar
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context); // Fecha o popup
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xff223148),
@@ -985,7 +991,11 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             // Botão Sair
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context); // Fecha o popup
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TelaLogin()),
+                ); // Fecha o popup // Fecha o popup
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text("Você saiu da conta!")));
@@ -1039,4 +1049,39 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
         //);
       //}
   }
+
+  void alterarSenha(token, senha, novaSenha) async {
+    final tokenVerificado = await Usuarios.verificarToken(token);
+    if(tokenVerificado != null && tokenVerificado["valido"] == true){
+      String email =  tokenVerificado["mensagem"]["email"];
+      final response = await Usuarios.alterarSenha(email ,senha, novaSenha);
+      if (!mounted) return;
+      if(response != null && response["sucesso"] == true){
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Senha alterada com sucesso!"),
+          ),
+        );
+      }else if(response != null && response["mensagem"] == "Senha inválida."){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response["mensagem"]),
+            ),
+          );
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erro ao alterar senha, tente novamente"),
+          ),
+        );
+      }
+    }else{
+      String errorMessage = tokenVerificado?['message'] ?? 'Algo deu errado, tente novamente!';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request failed: ${errorMessage}')),
+      );
+    }
+  }
 }
+
