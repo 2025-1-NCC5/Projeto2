@@ -546,13 +546,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
-                            // Fechar popup e salvar senha
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Senha alterada com sucesso!"),
-                              ),
-                            );
+                            alterarSenha(widget.token, currentPasswordController.text, confirmPasswordController.text);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -1055,4 +1049,39 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
         //);
       //}
   }
+
+  void alterarSenha(token, senha, novaSenha) async {
+    final tokenVerificado = await Usuarios.verificarToken(token);
+    if(tokenVerificado != null && tokenVerificado["valido"] == true){
+      String email =  tokenVerificado["mensagem"]["email"];
+      final response = await Usuarios.alterarSenha(email ,senha, novaSenha);
+      if (!mounted) return;
+      if(response != null && response["sucesso"] == true){
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Senha alterada com sucesso!"),
+          ),
+        );
+      }else if(response != null && response["mensagem"] == "Senha inválida."){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response["mensagem"]),
+            ),
+          );
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erro ao alterar senha, tente novamente"),
+          ),
+        );
+      }
+    }else{
+      String errorMessage = tokenVerificado?['message'] ?? 'Algo deu errado, tente novamente!';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request failed: ${errorMessage}')),
+      );
+    }
+  }
 }
+
