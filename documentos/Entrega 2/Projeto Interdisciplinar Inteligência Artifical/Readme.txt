@@ -1,0 +1,1 @@
+O executável do MVP está dentro do arquivo zipado (dentro da pasta Release, há um app do flutter, chamado Aplicattivo_Windows), ele só consegue ser executado, por enquanto em Windows.
