@@ -1,0 +1,2 @@
+Separação das tarefas da sprint
+ALinhamento sobre a tela de feedback - Será uma tela separada, com informações sobre a taxa de acertos das predições
