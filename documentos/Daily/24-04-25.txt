@@ -1,0 +1,13 @@
+24-04-25
+Definição de novas tarefas de refinamento:
+
+Arrumar tela de orçamentos (melhorar cards) - Felipe
+Implementar API do google de autocomplete na pesquisa de endereços
+Implementar deeplink para redirecionar para os aplicativos
+Desenvolver tela de dashboard - João e Felipe
+Desenvolver popup de feedback (5 estrelas e uma observações) - João
+Desenvolver endpoint de feedback (exibir a taxa de precisão para o usuário)
+Usar API Places para extrair estabelecimentos próximos ao local
+Refazer cálculos de distância e tempo com a API da Google
+Revisão de todas as telas entre figma e aplicativo - Todos
+Adicionar animações nos botões - Alex
