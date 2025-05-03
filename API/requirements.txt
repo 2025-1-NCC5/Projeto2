@@ -1,5 +1,0 @@
-flask_ngrok
-flask
-pyngrok
-joblib
-python-dotenv
