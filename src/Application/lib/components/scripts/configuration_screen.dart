@@ -6,7 +6,7 @@ import '../conexao_endpoints/usuarios.dart';
 import './tela_perfil.dart';
 
 class ConfigurationScreen extends StatefulWidget {
-   final String token;
+  final String token;
   const ConfigurationScreen({super.key, required this.token});
 
   @override
@@ -15,19 +15,20 @@ class ConfigurationScreen extends StatefulWidget {
 
 class _ConfigurationScreenState extends State<ConfigurationScreen> {
   void excluirConta(String email, String senha) async {
-      final response = await Usuarios.excluirConta(email, senha);
-      if(response != null && response["sucesso"] == true){
-        Navigator.push(
+    final response = await Usuarios.excluirConta(email, senha);
+    if (response != null && response["sucesso"] == true) {
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TelaLogin()),
-        );
-      }else{
-        String errorMessage = response?['message'] ?? 'Something went wrong!';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Request failed: ${errorMessage}')),
-        );
-      }
+      );
+    } else {
+      String errorMessage = response?['message'] ?? 'Something went wrong!';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request failed: ${errorMessage}')),
+      );
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,59 +62,59 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             GestureDetector(
               onTap: () => irParaTelaPerfil(),
               child: Container(
-              width: 350,
-              height: 80,
-              color: Color(0xFFCCDBFF),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 20,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF223148),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: SvgPicture.asset('assets/img_perfil.svg'),
+                width: 350,
+                height: 80,
+                color: Color(0xFFCCDBFF),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 20,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF223148),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset('assets/img_perfil.svg'),
+                            ),
                           ),
                         ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Meu Perfil",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF121212),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Meu Perfil",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF121212),
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Atualize sua informações pessoais",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Poppins',
-                              color: Color(0xFF262626),
+                            Text(
+                              "Atualize sua informações pessoais",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                                color: Color(0xFF262626),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                    Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
+                  ],
+                ),
               ),
-            ),
             ),
 
             // Campo Alterar Senha
@@ -521,7 +522,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         ),
                         child: Text(
                           "Cancelar",
-                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400,),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
 
@@ -546,7 +550,11 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
-                            alterarSenha(widget.token, currentPasswordController.text, confirmPasswordController.text);
+                            alterarSenha(
+                              widget.token,
+                              currentPasswordController.text,
+                              confirmPasswordController.text,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -562,7 +570,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         ),
                         child: Text(
                           "Salvar",
-                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400,),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ],
@@ -687,7 +698,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         ),
                         child: Text(
                           "Cancelar",
-                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
 
@@ -734,7 +748,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         ),
                         child: Text(
                           "Salvar",
-                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ],
@@ -887,10 +904,13 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         ),
                         child: Text(
                           "Cancelar",
-                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
-                      
+
                       // Botão Excluir Conta
                       ElevatedButton(
                         onPressed: () {
@@ -912,7 +932,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                               ),
                             );
                           } else {
-                            excluirConta(emailController.text, passwordController.text);
+                            excluirConta(
+                              emailController.text,
+                              passwordController.text,
+                            );
                             // Fechar popup e confirmar exclusão da conta
                             Navigator.pop(context);
                           }
@@ -931,7 +954,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         ),
                         child: Text(
                           "Excluir",
-                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ],
@@ -984,7 +1010,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
               ),
               child: Text(
                 "Cancelar",
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
 
@@ -1011,7 +1040,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
               ),
               child: Text(
                 "Sair",
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ],
@@ -1021,67 +1053,62 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   }
 
   void irParaTelaPerfil() async {
-      //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-      //if(response != null && response["sucesso"] == true){
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TelaPerfil(token : widget.token)),
-        );
-      //}//else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-      //}
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TelaPerfil(token: widget.token)),
+    );
+    //}//else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
   }
 
   void irParaHome() async {
-      //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-      //if(response != null && response["sucesso"] == true){
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen(token : widget.token)),
-        );
-      //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-      //}
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen(token: widget.token)),
+    );
+    //}else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
   }
 
   void alterarSenha(token, senha, novaSenha) async {
     final tokenVerificado = await Usuarios.verificarToken(token);
-    if(tokenVerificado != null && tokenVerificado["valido"] == true){
-      String email =  tokenVerificado["mensagem"]["email"];
-      final response = await Usuarios.alterarSenha(email ,senha, novaSenha);
+    if (tokenVerificado != null && tokenVerificado["valido"] == true) {
+      String email = tokenVerificado["mensagem"]["email"];
+      final response = await Usuarios.alterarSenha(email, senha, novaSenha);
       if (!mounted) return;
-      if(response != null && response["sucesso"] == true){
+      if (response != null && response["sucesso"] == true) {
         Navigator.pop(context);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Senha alterada com sucesso!")));
+      } else if (response != null &&
+          response["mensagem"] == "Senha inválida.") {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(response["mensagem"])));
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Senha alterada com sucesso!"),
-          ),
-        );
-      }else if(response != null && response["mensagem"] == "Senha inválida."){
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(response["mensagem"]),
-            ),
-          );
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao alterar senha, tente novamente"),
-          ),
+          SnackBar(content: Text("Erro ao alterar senha, tente novamente")),
         );
       }
-    }else{
-      String errorMessage = tokenVerificado?['message'] ?? 'Algo deu errado, tente novamente!';
+    } else {
+      String errorMessage =
+          tokenVerificado?['message'] ?? 'Algo deu errado, tente novamente!';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Request failed: ${errorMessage}')),
       );
     }
   }
 }
-
