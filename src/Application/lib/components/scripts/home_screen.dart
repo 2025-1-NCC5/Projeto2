@@ -1,10 +1,16 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/conexao_endpoints/tipo_de_conexao.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/web.dart';
+import 'package:uuid/uuid.dart';
 import './configuration_screen.dart';
 import './orcamento_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
 import './login_screen.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   final String token;
@@ -13,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
- 
+
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
@@ -104,128 +110,115 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showRidePopup(BuildContext context) {
     TextEditingController pickupController = TextEditingController();
     TextEditingController destinationController = TextEditingController();
+    final String sessionToken = const Uuid().v4();
+    List<dynamic> listaLocalizacoesPickup = [];
+    List<dynamic> listaLocalizacoesDestino = [];
+
+    Future<void> placeSuggestion(String input, bool isPickup) async {
+      const String apiKey = "AIzaSyCDmnx17lJCCO7GMJEIlqeBlRjnHxfI8b8"; 
+      try {
+        String url =
+            "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+        String request =
+            '$url?input=$input&key=$apiKey&sessiontoken=$sessionToken';
+        var response = await http.get(Uri.parse(request));
+        var data = json.decode(response.body);
+
+        if (response.statusCode == 200) {
+          if (kDebugMode) {
+            print(data);
+          }
+          if (isPickup) {
+            listaLocalizacoesPickup = data['predictions'];
+          } else {
+            listaLocalizacoesDestino = data['predictions'];
+          }
+        } else {
+          throw Exception("Falha ao carregar sugestões");
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Color(0xFF223148),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          contentPadding: EdgeInsets.all(40), // Aumenta o espaçamento interno
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.95, // 95% da tela
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Título + Linha
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              contentPadding: EdgeInsets.all(16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Minha Corrida",
+                      "Escolha os locais",
                       style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Color(0XFFD9D9D9),
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Divider(color: Color(0XFFA3A3A3), thickness: 3),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: pickupController,
+                      decoration: InputDecoration(labelText: "Origem"),
+                      onChanged: (value) async {
+                        await placeSuggestion(value, true);
+                        setState(() {});
+                      },
+                    ),
+                    ...listaLocalizacoesPickup.map(
+                      (e) => ListTile(
+                        title: Text(e['description']),
+                        onTap: () {
+                          pickupController.text = e['description'];
+                          setState(() => listaLocalizacoesPickup.clear());
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: destinationController,
+                      decoration: InputDecoration(labelText: "Destino"),
+                      onChanged: (value) async {
+                        await placeSuggestion(value, false);
+                        setState(() {});
+                      },
+                    ),
+                    ...listaLocalizacoesDestino.map(
+                      (e) => ListTile(
+                        title: Text(e['description']),
+                        onTap: () {
+                          destinationController.text = e['description'];
+                          setState(() => listaLocalizacoesDestino.clear());
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        simularCorrida(
+                          pickupController.text,
+                          destinationController.text,
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0XFF223148),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text("Simular Corrida"),
+                    ),
                   ],
                 ),
-                SizedBox(height: 48),
-
-                // Campo "Local de Partida"
-                TextField(
-                  controller: pickupController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: "Local de partida",
-                    labelStyle: TextStyle(
-                      color: Color(0xFFA3A3A3),
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                    ),
-                    // Removendo a borda padrão e usando apenas o arredondamento
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide.none, // Removendo o contorno
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide:
-                          BorderSide
-                              .none, // Também removendo o contorno ao focar
-                    ),
-                    suffixIcon: Icon(
-                      Icons.location_on,
-                      color: Color(0XFFA3A3A3),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                // Campo "Qual seu destino"
-                TextField(
-                  controller: destinationController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: "Qual seu destino",
-                    labelStyle: TextStyle(
-                      color: Color(0xFFA3A3A3),
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                    ),
-                    // Removendo a borda padrão e usando apenas o arredondamento
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide.none, // Removendo o contorno
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide:
-                          BorderSide
-                              .none, // Também removendo o contorno ao focar
-                    ),
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: Color(0XFFA3A3A3),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 36),
-
-                // Botão "Calcular Corrida"
-                ElevatedButton(
-                  onPressed: (){
-                    simularCorrida(pickupController.text, destinationController.text); 
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0XFF416383),
-                    foregroundColor: Color(0XFFD9D9D9),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                  ),
-                  child: Text(
-                    "Calcular Corrida",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -234,52 +227,59 @@ class _HomeScreenState extends State<HomeScreen> {
   void irParaConfiguration() async {
     //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
     //if(response != null && response["sucesso"] == true){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConfigurationScreen(token : widget.token)),
-      );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfigurationScreen(token: widget.token),
+      ),
+    );
     //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
     //}
   }
 
   void simularCorrida(String origem, String destino) async {
-      final tokenVerificado = await Usuarios.verificarToken(widget.token);
+    final tokenVerificado = await Usuarios.verificarToken(widget.token);
 
-      if(tokenVerificado != null && tokenVerificado["valido"] == true){
+    if (tokenVerificado != null && tokenVerificado["valido"] == true) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Calculando corrida...")));
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Calculando corrida...")),
-        );
+      final response = await Usuarios.simularCorrida(origem, destino);
 
-        final response = await Usuarios.simularCorrida(origem, destino);
-
-        if(response != null && response["sucesso"] == true){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token, respostaSimulacao : response)),
-        );
-        }else{
-          String errorMessage = response?['message'] ?? 'Tente Novamente';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Request failed: ${errorMessage}')),
-          );
-        }
-      }else{
-
-        String errorMessage = tokenVerificado?['mensagem'] ?? 'Favor, logar novamente.';
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
-        Navigator.pushAndRemoveUntil(
+      if (response != null && response["sucesso"] == true) {
+        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => TelaLogin()),
-          (Route<dynamic> route) => false,
+          MaterialPageRoute(
+            builder:
+                (context) => OrcamentoScreen(
+                  token: widget.token,
+                  respostaSimulacao: response,
+                ),
+          ),
+        );
+      } else {
+        String errorMessage = response?['message'] ?? 'Tente Novamente';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: ${errorMessage}')),
         );
       }
+    } else {
+      String errorMessage =
+          tokenVerificado?['mensagem'] ?? 'Favor, logar novamente.';
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 }
