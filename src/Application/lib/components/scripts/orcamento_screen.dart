@@ -23,7 +23,7 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
     logger.i(widget.respostaSimulacao);
     final predictions = widget.respostaSimulacao['data'] as Map<String, dynamic>;
     final entries = predictions.entries.toList()
-  ..sort((a, b) => (a.value as double).compareTo(b.value as double));
+  ..sort((a, b) => ((a.value as num).toDouble()).compareTo((b.value as num).toDouble()));
     final menorPreco = entries.map((e) => e.value).reduce((a, b) => a < b ? a : b);
 
     return Scaffold(
@@ -34,7 +34,7 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
         itemCount: entries.length,
         itemBuilder: (context, index) {
           final entry = entries[index];
-          final preco = (entry.value as double).toStringAsFixed(2);
+          final preco = ((entry.value as num).toDouble()).toStringAsFixed(2);
           final bool isRecomendado = entry.value == menorPreco;
 
           return Padding(

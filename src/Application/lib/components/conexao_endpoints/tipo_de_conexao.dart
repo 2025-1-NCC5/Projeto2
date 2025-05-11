@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:logger/logger.dart';
@@ -35,5 +36,17 @@ class TiposConexoes {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
+  }
+
+  static Future<String?> fetchUrl(Uri uri, {Map<String, String>? headers}) async {
+    try{
+      final response = await http.get(uri, headers: headers);
+      if(response.statusCode == 200){
+        return response.body;
+      }
+    } catch(e){
+      debugPrint(e.toString());
+    }
+    return null;
   }
 }
