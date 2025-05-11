@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/scripts/themeprovider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/web.dart';
+import 'package:provider/provider.dart';
+import '../themeprovider.dart';
 import './configuration_screen.dart';
 import './orcamento_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
@@ -13,84 +16,139 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
- 
-class _HomeScreenState extends State<HomeScreen> {
+
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100),
+      lowerBound: 0.0,
+      upperBound: 0.05,
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFCCDBFF),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         title: Stack(
           children: [
             Align(
               alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () => irParaConfiguration(),
-                icon: SvgPicture.asset('assets/img_configuracoes.svg'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                    icon: Icon(
+                      themeProvider.themeMode == ThemeMode.dark
+                          ? Icons.light_mode
+                          : Icons.dark_mode,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => irParaConfiguration(),
+                    icon: SvgPicture.asset(
+                      'assets/img_configuracoes.svg',
+                      colorFilter: ColorFilter.mode(
+                        Theme.of(context).iconTheme.color ?? Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
+              child: SvgPicture.asset(
+                'assets/txt_logo.svg',
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).iconTheme.color ?? Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ],
         ),
       ),
       body: Container(
-        color: Color(0XFFCCDBFF),
+        color: Theme.of(context).scaffoldBackgroundColor,
         width: double.infinity,
         height: double.infinity,
         child: Column(
-          mainAxisSize:
-              MainAxisSize
-                  .min, // Garante que a Column ocupe apenas o espaço necessário
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Centraliza os elementos verticalmente
-          crossAxisAlignment:
-              CrossAxisAlignment
-                  .center, // Centraliza os elementos horizontalmente
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               "Bem-Vindo, Passageiro!",
-              style: TextStyle(
-                fontFamily: 'Poppins',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: Color(0XFF121212),
-                fontSize: 28,
+                fontFamily: 'Poppins',
               ),
             ),
-            SizedBox(height: 16), // Espaço entre os textos
+            SizedBox(height: 16),
             Text(
               "Compare preços e escolha a melhor rota para você",
-              style: TextStyle(
-                fontFamily: 'Poppins',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w400,
                 fontSize: 20,
-                color: Color(0XFF262626),
+                fontFamily: 'Poppins',
               ),
-              textAlign:
-                  TextAlign.center, // Garante que o texto fique centralizado
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40), // Espaço entre o texto e o botão
-            ElevatedButton(
-              onPressed: () {
+            SizedBox(height: 40),
+            GestureDetector(
+              onTapDown: (_) => _controller.forward(),
+              onTapUp: (_) {
+                _controller.reverse();
                 _showRidePopup(context);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0XFF223148),
-                foregroundColor: Color(0XFFD9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              ),
-              child: Text(
-                "Comparar Preços",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
+              onTapCancel: () => _controller.reverse(),
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0XFF223148),
+                    foregroundColor: Color(0XFFD9D9D9),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                  child: Text(
+                    "Comparar Preços",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -113,9 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          contentPadding: EdgeInsets.all(40), // Aumenta o espaçamento interno
+          contentPadding: EdgeInsets.all(40),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.95, // 95% da tela
+            width: MediaQuery.of(context).size.width * 0.95,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -154,13 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Removendo a borda padrão e usando apenas o arredondamento
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide.none, // Removendo o contorno
+                      borderSide: BorderSide.none,
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
-                      borderSide:
-                          BorderSide
-                              .none, // Também removendo o contorno ao focar
+                      borderSide: BorderSide.none,
                     ),
                     suffixIcon: Icon(
                       Icons.location_on,
@@ -185,27 +241,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Removendo a borda padrão e usando apenas o arredondamento
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide.none, // Removendo o contorno
+                      borderSide: BorderSide.none,
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
-                      borderSide:
-                          BorderSide
-                              .none, // Também removendo o contorno ao focar
+                      borderSide: BorderSide.none,
                     ),
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: Color(0XFFA3A3A3),
-                    ),
+                    suffixIcon: Icon(Icons.search, color: Color(0XFFA3A3A3)),
                   ),
                 ),
                 SizedBox(height: 36),
 
                 // Botão "Calcular Corrida"
                 ElevatedButton(
-                  onPressed: (){
-                    simularCorrida(pickupController.text, destinationController.text); 
-                  }, 
+                  onPressed: () {
+                    simularCorrida(
+                      pickupController.text,
+                      destinationController.text,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0XFF416383),
                     foregroundColor: Color(0XFFD9D9D9),
@@ -231,55 +285,55 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void irParaConfiguration() async {
-    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-    //if(response != null && response["sucesso"] == true){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConfigurationScreen(token : widget.token)),
-      );
-    //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-    //}
+  void irParaConfiguration() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfigurationScreen(token: widget.token),
+      ),
+    );
   }
 
   void simularCorrida(String origem, String destino) async {
-      final tokenVerificado = await Usuarios.verificarToken(widget.token);
+    final tokenVerificado = await Usuarios.verificarToken(widget.token);
 
-      if(tokenVerificado != null && tokenVerificado["valido"] == true){
+    if (tokenVerificado != null && tokenVerificado["valido"] == true) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Calculando corrida...")));
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Calculando corrida...")),
-        );
+      final response = await Usuarios.simularCorrida(origem, destino);
 
-        final response = await Usuarios.simularCorrida(origem, destino);
-
-        if(response != null && response["sucesso"] == true){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => OrcamentoScreen(token : widget.token, respostaSimulacao : response)),
-        );
-        }else{
-          String errorMessage = response?['message'] ?? 'Tente Novamente';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Request failed: ${errorMessage}')),
-          );
-        }
-      }else{
-
-        String errorMessage = tokenVerificado?['mensagem'] ?? 'Favor, logar novamente.';
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
-        Navigator.pushAndRemoveUntil(
+      if (response != null && response["sucesso"] == true) {
+        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => TelaLogin()),
-          (Route<dynamic> route) => false,
+          MaterialPageRoute(
+            builder:
+                (context) => OrcamentoScreen(
+                  token: widget.token,
+                  respostaSimulacao: response,
+                ),
+          ),
+        );
+      } else {
+        String errorMessage = response?['message'] ?? 'Tente Novamente';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Request failed: $errorMessage')),
         );
       }
+    } else {
+      String errorMessage =
+          tokenVerificado?['mensagem'] ?? 'Favor, logar novamente.';
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => TelaLogin()),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 }

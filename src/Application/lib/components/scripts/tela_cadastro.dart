@@ -11,13 +11,11 @@ import 'package:logger/logger.dart';
 //import 'package:flutter_application_2/models/cadastro.dart';
 //import 'package:flutter_application_2/services/cadastro.dart';
 
-
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
 
   @override
   State<TelaCadastro> createState() => _TelaCadastroState();
-
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {
@@ -37,24 +35,40 @@ class _TelaCadastroState extends State<TelaCadastro> {
   bool _aceitouTermos = false;
 
   void cadastrar() async {
-      var logger = Logger();
+    var logger = Logger();
 
-      logger.i("Inicio da Função");
-      logger.d(nomeController.text + " " + telefoneController.text + " " + emailController.text + " " + senhaController.text + " " + dataNascimentoController.text);
-      final response = await Usuarios.criarUsuario(nomeController.text, telefoneController.text, emailController.text, senhaController.text, dataNascimentoController.text);
+    logger.i("Inicio da Função");
+    logger.d(
+      nomeController.text +
+          " " +
+          telefoneController.text +
+          " " +
+          emailController.text +
+          " " +
+          senhaController.text +
+          " " +
+          dataNascimentoController.text,
+    );
+    final response = await Usuarios.criarUsuario(
+      nomeController.text,
+      telefoneController.text,
+      emailController.text,
+      senhaController.text,
+      dataNascimentoController.text,
+    );
 
-      logger.i("Resposta da API");
-      if(response != null && response["sucesso"] == true){
-        Navigator.push(
+    logger.i("Resposta da API");
+    if (response != null && response["sucesso"] == true) {
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TelaLogin()),
-        );
-      }else{
-        String errorMessage = response?['message'] ?? 'Something went wrong!';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Request failed: ${errorMessage}')),
-        );
-      }
+      );
+    } else {
+      String errorMessage = response?['message'] ?? 'Something went wrong!';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Request failed: ${errorMessage}')),
+      );
+    }
   }
 
   void _mostrarDialogo(String titulo, String conteudo) {
@@ -81,7 +95,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
     try {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } catch (e) {
-      _mostrarDialogo("Erro", "Não foi possível abrir o site dos Termos de Uso.");
+      _mostrarDialogo(
+        "Erro",
+        "Não foi possível abrir o site dos Termos de Uso.",
+      );
     }
   }
 
@@ -96,7 +113,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     if (dataSelecionada != null) {
       setState(() {
         dataNascimentoController.text =
-          "${dataSelecionada.day}-${dataSelecionada.month}-${dataSelecionada.year}";
+            "${dataSelecionada.day}-${dataSelecionada.month}-${dataSelecionada.year}";
       });
     }
   }
@@ -192,9 +209,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildButton("Voltar", Color(0xff223148), Color(0XFFD9D9D9), () {
-                        irParaTelaInicial();
-                      }),
+                      _buildButton(
+                        "Voltar",
+                        Color(0xff223148),
+                        Color(0XFFD9D9D9),
+                        () {
+                          irParaTelaInicial();
+                        },
+                      ),
                       _buildButton(
                         "Confirmar",
                         Color(0xff223148),
