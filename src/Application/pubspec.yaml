@@ -40,6 +40,7 @@ flutter:
     - assets/img_excluir.svg
     - assets/img_sair.svg
     - assets/img_configuracoes.svg
+    - assets/txt_logo.svg
   fonts:
     - family: Poppins
       fonts:

@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
         String url =
             "https://maps.googleapis.com/maps/api/place/autocomplete/json";
         String request =
-            '$url?input=$input&key=$apiKey&sessiontoken=$sessionToken';
+            '$url?input=$input&key=$apiKey&components=country:br&sessiontoken=$sessionToken';
         var response = await http.get(Uri.parse(request));
         var data = json.decode(response.body);
 
