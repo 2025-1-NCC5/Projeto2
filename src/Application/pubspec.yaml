@@ -1,4 +1,4 @@
-name: flutter_application_2
+name: Vuca
 description: "A new Flutter project."
 publish_to: 'none' 
 
@@ -31,7 +31,7 @@ flutter:
   assets:
     - assets/web/vinheta.gif
     - assets/web/vinheta.mp4
-    - assets/txt_logo.svg
+    - assets/txt_logo.png
     - assets/grp_returner.svg
     - assets/img_perfil.svg
     - assets/ver_perfil.svg

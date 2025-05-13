@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/scripts/home_screen.dart';
+import 'package:Vuca/components/scripts/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:shared_preferences/shared_preferences.dart';

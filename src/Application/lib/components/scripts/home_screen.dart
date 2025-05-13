@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/conexao_endpoints/tipo_de_conexao.dart';
+import 'package:Vuca/components/conexao_endpoints/tipo_de_conexao.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
