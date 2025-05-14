@@ -38,7 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
+              child: Image.asset('assets/txt_logo.png',
+              width: 120,
+              height: 80,
+              fit: BoxFit.fill),
             ),
           ],
         ),
