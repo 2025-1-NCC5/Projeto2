@@ -88,7 +88,10 @@ class _TelaLoginState extends State<TelaLogin> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
+              child: Image.asset('assets/txt_logo.png',
+              width: 120,
+              height: 80,
+              fit: BoxFit.fill),
             ),
           ],
         ),
