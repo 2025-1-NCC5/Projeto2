@@ -21,26 +21,27 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
   @override
   Widget build(BuildContext context) {
     logger.i(widget.respostaSimulacao);
-    final predictions = widget.respostaSimulacao['data'] as Map<String, dynamic>;
-    final entries = predictions.entries.toList()
-  ..sort((a, b) => ((a.value as num).toDouble()).compareTo((b.value as num).toDouble()));
-    final menorPreco = entries.map((e) => e.value).reduce((a, b) => a < b ? a : b);
+    final precos =  List<Map<String, dynamic>>.from(widget.respostaSimulacao['data']);
+    precos.sort((a, b) =>
+        (a['preco'] as num).compareTo(b['preco'] as num));
+
+    final menorPreco = precos.first['preco'];
 
     return Scaffold(
       backgroundColor: const Color(0xFF121212), // fundo escuro, opcional
       appBar: AppBar(title: Text("Corridas Simuladas")),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        itemCount: entries.length,
+        itemCount: precos.length,
         itemBuilder: (context, index) {
-          final entry = entries[index];
-          final preco = ((entry.value as num).toDouble()).toStringAsFixed(2);
-          final bool isRecomendado = entry.value == menorPreco;
+          final entry = precos[index];
+          final preco = ((entry['preco'] as num).toDouble()).toStringAsFixed(2);
+          final bool isRecomendado = entry['preco'] == menorPreco;
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: buildCard(
-              titulo: entry.key,
+              titulo: "${entry['empresa']} - ${entry['categoria']}",
               preco: "R\$ $preco",
               recomendado: isRecomendado,
             ),
