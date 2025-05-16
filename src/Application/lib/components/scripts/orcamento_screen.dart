@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Vuca/components/scripts/configuration_screen.dart';
+import './configuration_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/logger.dart';
 //import '../conexao_endpoints/usuarios.dart';
@@ -132,16 +132,6 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
               left: 16,
               child: Row(
                 children: [
-                  if (recomendado)
-                    Text(
-                      'Recomendada',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
                   Text(
                     titulo,
                     style: TextStyle(

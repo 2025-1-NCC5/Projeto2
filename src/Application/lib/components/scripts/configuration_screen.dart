@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Vuca/components/scripts/login_screen.dart';
+import './login_screen.dart';
 import './home_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
 import './tela_perfil.dart';
