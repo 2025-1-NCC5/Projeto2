@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           color: Color(0XFFCCDBFF),
           width: double.infinity,
-          padding: EdgeInsets.only(bottom: 40),
+          padding: EdgeInsets.only(bottom: 130),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
