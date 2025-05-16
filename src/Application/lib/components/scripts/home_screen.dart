@@ -30,18 +30,26 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Stack(
           children: [
             Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () => irParaConfiguration(),
-                icon: SvgPicture.asset('assets/img_configuracoes.svg'),
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.only(right: 16.0, top: 16.0),
+                child: IconButton(
+                  onPressed: () => irParaConfiguration(),
+                  icon: SvgPicture.asset('assets/img_configuracoes.svg'),
+                ),
               ),
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: Image.asset('assets/txt_logo.png',
-              width: 120,
-              height: 80,
-              fit: BoxFit.fill),
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.0, top: 16.0),
+                child: Image.asset(
+                  'assets/txt_logo.png',
+                  width: 120,
+                  height: 80,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
           ],
         ),

@@ -48,20 +48,23 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Botão de voltar
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: SvgPicture.asset(
-                  'assets/btn_retornar.svg',
-                  width: 36,
-                  height: 36,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16.0, top: 16.0),
+                  child: IconButton(
+                    onPressed: () => irParaHome(),
+                    icon: SvgPicture.asset('assets/grp_returner.svg'),
+                  ),
                 ),
               ),
               // Logo VUCA (imagem PNG)
-              Image.asset(
-                'assets/logo_vuca.png',
-                width: screenWidth * 0.25,
-                height: 60,
-                fit: BoxFit.contain,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset('assets/txt_logo.png',
+                    width: 120,
+                    height: 80,
+                    fit: BoxFit.fill),
               ),
               // Botão de configurações
               GestureDetector(

@@ -38,9 +38,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: IconButton(
-                onPressed: () => irParaHome(),
-                icon: SvgPicture.asset('assets/grp_returner.svg'),
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.0, top: 16.0),
+                child: IconButton(
+                  onPressed: () => irParaHome(),
+                  icon: SvgPicture.asset('assets/grp_returner.svg'),
+                ),
               ),
             ),
             Align(
