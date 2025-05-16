@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import './configuration_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,15 +6,20 @@ import 'package:logger/logger.dart';
 //import '../conexao_endpoints/usuarios.dart';
 import './home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class OrcamentoScreen extends StatefulWidget {
   final String token;
   final Map<String, dynamic> respostaSimulacao;
+  final String origem;
+  final String destino;
 
   const OrcamentoScreen({
     super.key,
     required this.token,
     required this.respostaSimulacao,
+    required this.origem,
+    required this.destino,
   });
 
   @override
@@ -22,16 +28,38 @@ class OrcamentoScreen extends StatefulWidget {
 
 class _OrcamentoScreenState extends State<OrcamentoScreen> {
   void chamarUberComOrigemEDestino() async {
-    final url = Uri.parse(
-      'uber://?client_id=1Sb8V21lmfeEAwcyuDjvsEN1VFdDnOvS&action=setPickup&pickup=my_location&dropoff[latitude]=-23.568392&dropoff[longitude]=-46.655536'
-    );
+    const String apiKey = "AIzaSyCDmnx17lJCCO7GMJEIlqeBlRjnHxfI8b8";
 
     try {
+      String baseUrl = "https://maps.googleapis.com/maps/api/geocode/json";
+
+      String requestOrigem = '$baseUrl?address=${Uri.encodeComponent(widget.origem)}&key=$apiKey';
+      String requestDestino = '$baseUrl?address=${Uri.encodeComponent(widget.destino)}&key=$apiKey';
+
+      var responseOrigem = await http.get(Uri.parse(requestOrigem));
+      var responseDestino = await http.get(Uri.parse(requestDestino));
+
+      var dataOrigem = json.decode(responseOrigem.body);
+      var dataDestino = json.decode(responseDestino.body);
+
+      final latOrigem = dataOrigem['results'][0]['geometry']['location']['lat'];
+      final lngOrigem = dataOrigem['results'][0]['geometry']['location']['lng'];
+      final latDestino = dataDestino['results'][0]['geometry']['location']['lat'];
+      final lngDestino = dataDestino['results'][0]['geometry']['location']['lng'];
+
+      final uberUrl = Uri.parse(
+          'uber://?client_id=1Sb8V21lmfeEAwcyuDjvsEN1VFdDnOvS'
+              '&action=setPickup'
+              '&pickup[latitude]=$latOrigem&pickup[longitude]=$lngOrigem'
+              '&dropoff[latitude]=$latDestino&dropoff[longitude]=$lngDestino'
+      );
+
       await launchUrl(
-        url,
+        uberUrl,
         mode: LaunchMode.externalApplication,
       );
     } catch (e) {
+      print("Erro ao chamar Uber: $e");
       await launchUrl(
         Uri.parse('market://details?id=com.ubercab'),
         mode: LaunchMode.externalApplication,
@@ -39,15 +67,20 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
     }
   }
 
-
   void chamar99ComOrigemEDestino() async {
-    final url = Uri.parse('ninety_nine://');
+    final origem = Uri.encodeComponent(widget.origem);
+    final destino = Uri.encodeComponent(widget.destino);
+    final mapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=$origem&destination=$destino&travelmode=driving';
 
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
+    try{
       await launchUrl(
-        Uri.parse('https://play.google.com/store/apps/details?id=com.taxis99'),
+        Uri.parse(mapsUrl),
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      print("Erro ao abrir o Maps: $e");
+      await launchUrl(
+        Uri.parse('market://details?id=com.taxis99'),
         mode: LaunchMode.externalApplication,
       );
     }

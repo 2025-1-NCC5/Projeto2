@@ -407,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xFFCCDBFF),
               contentPadding: EdgeInsets.all(16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -426,7 +426,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16),
                     TextField(
                       controller: pickupController,
-                      decoration: InputDecoration(labelText: "Origem"),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: "Origem",
+                        labelStyle: TextStyle(
+                          color: Color(0xFFA3A3A3),
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFF515151),
+                          ), // Borda padrão
+                        ),
+                      ),
                       onChanged: (value) async {
                         await placeSuggestion(value, true);
                         setState(() {});
@@ -444,7 +458,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 10),
                     TextField(
                       controller: destinationController,
-                      decoration: InputDecoration(labelText: "Destino"),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: "Destino",
+                        labelStyle: TextStyle(
+                          color: Color(0xFFA3A3A3),
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFF515151),
+                          ), // Borda padrão
+                        ),
+                      ),
                       onChanged: (value) async {
                         await placeSuggestion(value, false);
                         setState(() {});
@@ -470,9 +498,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0XFF223148),
-                        foregroundColor: Colors.white,
+                        foregroundColor: Color(0XFFD9D9D9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: Text("Simular Corrida"),
+                      child: Text("Simular Corrida", style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),),
                     ),
                   ],
                 ),
@@ -519,6 +551,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 (context) => OrcamentoScreen(
                   token: widget.token,
                   respostaSimulacao: response,
+                  origem: origem,
+                  destino: destino,
                 ),
           ),
         );
