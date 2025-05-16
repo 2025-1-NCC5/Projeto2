@@ -25,7 +25,7 @@ class _TelaBoasVindasState extends State<TelaBoasVindas> {
       backgroundColor: Colors.black,
       body: Center(
         child: Image.asset(
-          'assets/web/vinheta.gif',
+          'assets/web/Logo-VUCA.gif',
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           fit: BoxFit.contain,
