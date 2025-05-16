@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Stack(
           children: [
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.centerRight,
               child: Padding(
                 padding: EdgeInsets.only(right: 16.0, top: 16.0),
                 child: IconButton(

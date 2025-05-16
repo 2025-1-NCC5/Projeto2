@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/logger.dart';
 //import '../conexao_endpoints/usuarios.dart';
 import './home_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrcamentoScreen extends StatefulWidget {
   final String token;
@@ -20,6 +21,38 @@ class OrcamentoScreen extends StatefulWidget {
 }
 
 class _OrcamentoScreenState extends State<OrcamentoScreen> {
+  void chamarUberComOrigemEDestino() async {
+    final url = Uri.parse(
+      'uber://?client_id=1Sb8V21lmfeEAwcyuDjvsEN1VFdDnOvS&action=setPickup&pickup=my_location&dropoff[latitude]=-23.568392&dropoff[longitude]=-46.655536'
+    );
+
+    try {
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      await launchUrl(
+        Uri.parse('market://details?id=com.ubercab'),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
+
+  void chamar99ComOrigemEDestino() async {
+    final url = Uri.parse('ninety_nine://');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      await launchUrl(
+        Uri.parse('https://play.google.com/store/apps/details?id=com.taxis99'),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
   var logger = Logger();
 
   final Color backgroundColor = Color(0xFFCCDBFF);
@@ -31,41 +64,39 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
     final precos =  List<Map<String, dynamic>>.from(widget.respostaSimulacao['data']);
     precos.sort((a, b) =>
         (a['preco'] as num).compareTo(b['preco'] as num));
-
     final menorPreco = precos.first['preco'];
 
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      // Header personalizado
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: Size.fromHeight(80),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
           color: backgroundColor,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Botão de voltar
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16.0, top: 16.0),
-                  child: IconButton(
-                    onPressed: () => irParaHome(),
-                    icon: SvgPicture.asset('assets/grp_returner.svg'),
+              IconButton(
+                onPressed: () => irParaHome(),
+                icon: SvgPicture.asset('assets/grp_returner.svg'),
+              ),
+
+              // Logo centralizada
+              Expanded(
+                child: Center(
+                  child: Image.asset(
+                    'assets/txt_logo.png',
+                    width: 120,
+                    height: 80,
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),
-              // Logo VUCA (imagem PNG)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Image.asset('assets/txt_logo.png',
-                    width: 120,
-                    height: 80,
-                    fit: BoxFit.fill),
-              ),
+
               // Botão de configurações
               GestureDetector(
                 onTap: () {
@@ -87,6 +118,7 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
         ),
       ),
 
+
       // Lista de cards de preços
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -98,11 +130,20 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
-            child: buildCard(
-              titulo: "${entry['empresa']} - ${entry['categoria']}",
-              preco: "R\$ $preco",
-              recomendado: isRecomendado,
-              screenWidth: screenWidth,
+            child: InkWell(
+              onTap: () {
+                if(entry['empresa'] == 'Uber'){
+                  chamarUberComOrigemEDestino();
+                }else{
+                  chamar99ComOrigemEDestino();
+                }
+              },
+              child: buildCard(
+                titulo: "${entry['empresa']} - ${entry['categoria']}",
+                preco: "R\$ $preco",
+                recomendado: isRecomendado,
+                screenWidth: screenWidth,
+              ),
             ),
           );
         },
