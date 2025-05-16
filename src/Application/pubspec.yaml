@@ -1,4 +1,4 @@
-name: Vuca
+name: flutter_application_2
 description: "A new Flutter project."
 publish_to: 'none' 
 
@@ -40,9 +40,7 @@ flutter:
     - assets/img_excluir.svg
     - assets/img_sair.svg
     - assets/img_configuracoes.svg
-<<<<<<< Updated upstream
     - assets/txt_logo.svg
-=======
     - assets/carro_preto.svg
     - assets/carro_laranja.svg
     - assets/estrela.svg
@@ -50,7 +48,6 @@ flutter:
     - assets/carro_laranja.png
     - assets/logo_vuca.png
     - assets/btn_retornar.svg
->>>>>>> Stashed changes
   fonts:
     - family: Poppins
       fonts:
