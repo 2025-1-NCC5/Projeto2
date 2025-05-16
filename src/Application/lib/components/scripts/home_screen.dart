@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../conexao_endpoints/tipo_de_conexao.dart';
@@ -11,6 +10,7 @@ import './orcamento_screen.dart';
 import '../conexao_endpoints/usuarios.dart';
 import './login_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   final String token;
@@ -54,69 +54,316 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        color: Color(0XFFCCDBFF),
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisSize:
-              MainAxisSize
-                  .min, // Garante que a Column ocupe apenas o espaço necessário
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Centraliza os elementos verticalmente
-          crossAxisAlignment:
-              CrossAxisAlignment
-                  .center, // Centraliza os elementos horizontalmente
-          children: [
-            Text(
-              "Seja Bem-Vindo,\nPassageiro!",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                color: Color(0XFF121212),
-                fontSize: 28,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Color(0XFFCCDBFF),
+          width: double.infinity,
+          padding: EdgeInsets.only(bottom: 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                children: [
+                  Image.asset(
+                    'assets/cruzamento.png',
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    height: 300,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    color: Color.fromARGB(160, 0, 0, 0),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        "Descubra o melhor preço para sua próxima corrida e viaje pagando menos.",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 16), // Espaço entre os textos
-            Text(
-              "Compare preços e escolha a melhor rota para você",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w400,
-                fontSize: 20,
-                color: Color(0XFF262626),
-              ),
-              textAlign:
-                  TextAlign.center, // Garante que o texto fique centralizado
-            ),
-            SizedBox(height: 40), // Espaço entre o texto e o botão
-            ElevatedButton(
-              onPressed: () {
-                _showRidePopup(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0XFF223148),
-                foregroundColor: Color(0XFFD9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              ),
-              child: Text(
-                "Comparar Preços",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
+              SizedBox(height: 80),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Bem-Vindo, Passageiro!",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    color: Color(0XFF121212),
+                    fontSize: 28,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Compare preços e escolha a melhor rota para você",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    color: Color(0XFF262626),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _showRidePopup(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0XFF223148),
+                  foregroundColor: Color(0XFFD9D9D9),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                child: Text(
+                  "Comparar Preços",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              SizedBox(height: 80),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Deixe seu Feedback!",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    color: Color(0XFF121212),
+                    fontSize: 28,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 16),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Como está sendo sua experiência com o app?",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 20,
+                    color: Color(0xFF262626),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _abrirPopupFeedback(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0XFF223148),
+                  foregroundColor: Color(0XFFD9D9D9),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                child: Text(
+                  "Enviar Feedback",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  // Popup do feedback
+  void _abrirPopupFeedback(BuildContext context) {
+    TextEditingController opiniaoController = TextEditingController();
+    TextEditingController precisaoController = TextEditingController();
+    int _rating = 0;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Color(0xFFCCDBFF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              title: Text(
+                "Deixe seu feedback",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF121212),
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Avaliação geral:",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF121212),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(5, (index) {
+                        return IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _rating = index + 1;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.star,
+                            color: (index < _rating) ? Colors.amber : Colors.grey,
+                            size: 32,
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      "O que está achando do app?",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF121212),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: opiniaoController,
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                        hintText: "Digite sua opinião",
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      "A predição dos valores está correta?",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF121212),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: precisaoController,
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                        hintText: "Diga se os valores estão precisos",
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red, // Fundo vermelho
+                    foregroundColor: Colors.white, // Texto branco
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  child: Text(
+                    "Cancelar",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final opiniao = opiniaoController.text.trim();
+                    final precisao = precisaoController.text.trim();
+
+                    if (opiniao.isNotEmpty || precisao.isNotEmpty || _rating > 0) {
+                      _enviarFeedbackPorEmail(opiniao, precisao, _rating);
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Obrigado pelo seu feedback!")),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF223148),
+                    foregroundColor: Color(0xFFD9D9D9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  child: Text(
+                    "Enviar",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // manda o feedback pro email da empresa
+  void _enviarFeedbackPorEmail(String opiniao, String precisao, int rating) async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'suporte.vuca@gmail.com',
+      query: Uri.encodeFull(
+        'subject=Feedback do App&body='
+        'O que está achando do app:\n$opiniao\n\n'
+        'A predição dos valores está correta:\n$precisao\n\n'
+        'Avaliação: $rating estrelas',
+      ),
+    );
+
+    if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri);
+    } else {
+      print('Não foi possível abrir o cliente de e-mail.');
+    }
   }
 
   // Popup do orçamento de corrida

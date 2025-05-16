@@ -123,7 +123,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 40),
 
                 // Alterar Senha

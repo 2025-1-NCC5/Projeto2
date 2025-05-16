@@ -43,6 +43,7 @@ flutter:
     - assets/img_sair.svg
     - assets/img_configuracoes.svg
     - assets/txt_logo.svg
+    - assets/cruzamento.png
     - assets/carro_preto.svg
     - assets/carro_laranja.svg
     - assets/estrela.svg
