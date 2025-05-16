@@ -94,8 +94,8 @@ class _TelaLoginState extends State<TelaLogin> {
                     margin: const EdgeInsets.only(left: 12.0, bottom: 80.0),
                     child: Image.asset(
                       'assets/txt_logo.png',
-                      width: 105,
-                      height: 65,
+                      width: 120,
+                      height: 80,
                       fit: BoxFit.fill,
                     ),
                   ),

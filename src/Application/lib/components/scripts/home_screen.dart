@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 16.0, top: 16.0),
+                padding: EdgeInsets.only(left: 12.0),
                 child: Image.asset(
                   'assets/txt_logo.png',
                   width: 120,
@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         color: Color(0XFFCCDBFF),
         width: double.infinity,
         height: double.infinity,
@@ -69,13 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   .center, // Centraliza os elementos horizontalmente
           children: [
             Text(
-              "Bem-Vindo, Passageiro!",
+              "Seja Bem-Vindo,\nPassageiro!",
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
                 color: Color(0XFF121212),
                 fontSize: 28,
               ),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 16), // Espaço entre os textos
             Text(

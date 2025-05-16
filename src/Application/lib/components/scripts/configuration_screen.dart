@@ -31,6 +31,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFCCDBFF),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFCCDBFF),
@@ -39,7 +40,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 16.0, top: 16.0),
+                padding: EdgeInsets.only(left: 12.0, top: 16.0),
                 child: IconButton(
                   onPressed: () => irParaHome(),
                   icon: SvgPicture.asset('assets/grp_returner.svg'),
@@ -56,320 +57,309 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ],
         ),
       ),
-      body: Container(
-        color: Color(0XFFCCDBFF),
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Campo Meu Perfil
-            GestureDetector(
-              onTap: () => irParaTelaPerfil(),
-              child: Container(
-              width: 350,
-              height: 80,
-              color: Color(0xFFCCDBFF),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 20,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF223148),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: SvgPicture.asset('assets/img_perfil.svg'),
-                          ),
+      body: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+          color: Color(0XFFCCDBFF),
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+
+                // Meu Perfil
+                GestureDetector(
+                  onTap: () => irParaTelaPerfil(),
+                  child: Container(
+                    height: 80,
+                    color: Color(0xFFCCDBFF),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 20,
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF223148),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset('assets/img_perfil.svg'),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Meu Perfil",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF121212),
+                                  ),
+                                ),
+                                Text(
+                                  "Atualize sua informações pessoais",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF262626),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Meu Perfil",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF121212),
-                            ),
-                          ),
-                          Text(
-                            "Atualize sua informações pessoais",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Poppins',
-                              color: Color(0xFF262626),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                        SvgPicture.asset('assets/ver_perfil.svg'),
+                      ],
+                    ),
                   ),
-                  Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
-                ],
-              ),
-            ),
-            ),
+                ),
 
-            // Campo Alterar Senha
-            GestureDetector(
-              onTap: () {
-                _showChangePasswordPopup(context);
-              },
-              child: Container(
-                width: 350,
-                height: 80,
-                color: Color(0xFFCCDBFF),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 20,
+                SizedBox(height: 40),
+
+                // Alterar Senha
+                GestureDetector(
+                  onTap: () => _showChangePasswordPopup(context),
+                  child: Container(
+                    height: 80,
+                    color: Color(0xFFCCDBFF),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF223148),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/img_alterar_senha.svg',
-                              ),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 20,
                           children: [
-                            Text(
-                              "Alterar Senha",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF121212),
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF223148),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset('assets/img_alterar_senha.svg'),
                               ),
                             ),
-                            Text(
-                              "Mantenha sua conta segura",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF262626),
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Alterar Senha",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF121212),
+                                  ),
+                                ),
+                                Text(
+                                  "Mantenha sua conta segura",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF262626),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        SvgPicture.asset('assets/ver_perfil.svg'),
                       ],
                     ),
-                    Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
-                  ],
+                  ),
                 ),
-              ),
-            ),
 
-            // Campo Alterar E-mail
-            GestureDetector(
-              onTap: () {
-                _showChangeEmailPopup(context);
-              },
-              child: Container(
-                width: 350,
-                height: 80,
-                color: Color(0xFFCCDBFF),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 20,
+                SizedBox(height: 40),
+
+                // Alterar E-mail
+                GestureDetector(
+                  onTap: () => _showChangeEmailPopup(context),
+                  child: Container(
+                    height: 80,
+                    color: Color(0xFFCCDBFF),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF223148),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset('assets/img_email.svg'),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 20,
                           children: [
-                            Text(
-                              "Alterar e-mail",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF121212),
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF223148),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset('assets/img_email.svg'),
                               ),
                             ),
-                            Text(
-                              "Modifique seu e-mail cadastrado",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF262626),
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Alterar e-mail",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF121212),
+                                  ),
+                                ),
+                                Text(
+                                  "Modifique seu e-mail cadastrado",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF262626),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        SvgPicture.asset('assets/ver_perfil.svg'),
                       ],
                     ),
-                    Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
-                  ],
+                  ),
                 ),
-              ),
-            ),
 
-            // Campo Excluir Conta
-            GestureDetector(
-              onTap: () {
-                _showDeleteAccountPopup(context);
-              },
-              child: Container(
-                width: 350,
-                height: 80,
-                color: Color(0xFFCCDBFF),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 20,
+                SizedBox(height: 40),
+
+                // Excluir Conta
+                GestureDetector(
+                  onTap: () => _showDeleteAccountPopup(context),
+                  child: Container(
+                    height: 80,
+                    color: Color(0xFFCCDBFF),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF223148),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset('assets/img_excluir.svg'),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 20,
                           children: [
-                            Text(
-                              "Excluir Conta",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF121212),
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF223148),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset('assets/img_excluir.svg'),
                               ),
                             ),
-                            Text(
-                              "Remova em definitivo sua conta",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF262626),
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Excluir Conta",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF121212),
+                                  ),
+                                ),
+                                Text(
+                                  "Remova em definitivo sua conta",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF262626),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        SvgPicture.asset('assets/ver_perfil.svg'),
                       ],
                     ),
-                    Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
-                  ],
+                  ),
                 ),
-              ),
-            ),
 
-            // Campo Sair da Conta
-            GestureDetector(
-              onTap: () {
-                _showExitAccountPopup(context);
-              },
-              child: Container(
-                width: 350,
-                height: 80,
-                color: Color(0xFFCCDBFF),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 20,
+                SizedBox(height: 40),
+
+                // Sair da Conta
+                GestureDetector(
+                  onTap: () => _showExitAccountPopup(context),
+                  child: Container(
+                    height: 80,
+                    color: Color(0xFFCCDBFF),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF223148),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset('assets/img_sair.svg'),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 20,
                           children: [
-                            Text(
-                              "Sair da Conta",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: Color(0XFF121212),
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF223148),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset('assets/img_sair.svg'),
                               ),
                             ),
-                            Text(
-                              "Encerrar seção nesse dispositivo",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF262626),
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Sair da Conta",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0XFF121212),
+                                  ),
+                                ),
+                                Text(
+                                  "Encerrar seção nesse dispositivo",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF262626),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        SvgPicture.asset('assets/ver_perfil.svg'),
                       ],
                     ),
-                    Center(child: SvgPicture.asset('assets/ver_perfil.svg')),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
+
+
+
+
     );
   }
 
@@ -435,7 +425,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                     style: TextStyle(color: Color(0XFF121212)),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
 
                   // Campo Nova Senha
                   TextField(
@@ -469,7 +459,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                     style: TextStyle(color: Color(0XFF121212)),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
 
                   // Campo Confirme a Senha
                   TextField(
@@ -627,7 +617,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                     style: TextStyle(color: Color(0XFF121212)),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
 
                   // Campo Novo E-mail
                   TextField(
@@ -648,7 +638,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                     style: TextStyle(color: Color(0XFF121212)),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
 
                   // Campo Confirme o Novo E-mail
                   TextField(
@@ -801,7 +791,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                     style: TextStyle(color: Color(0XFF121212)),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
 
                   // Campo Senha
                   TextField(
@@ -835,7 +825,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                     style: TextStyle(color: Color(0XFF121212)),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
 
                   // Campo Confirme a Senha
                   TextField(
