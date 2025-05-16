@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Vuca/components/conexao_endpoints/tipo_de_conexao.dart';
+import '../conexao_endpoints/tipo_de_conexao.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
@@ -31,14 +31,25 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Align(
               alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () => irParaConfiguration(),
-                icon: SvgPicture.asset('assets/img_configuracoes.svg'),
+              child: Padding(
+                padding: EdgeInsets.only(right: 16.0, top: 16.0),
+                child: IconButton(
+                  onPressed: () => irParaConfiguration(),
+                  icon: SvgPicture.asset('assets/img_configuracoes.svg'),
+                ),
               ),
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
+              child: Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Image.asset(
+                  'assets/txt_logo.png',
+                  width: 120,
+                  height: 80,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
           ],
         ),

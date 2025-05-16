@@ -21,7 +21,10 @@ class _TelaPerfilState extends State<TelaPerfil> {
           children: [
             Align(
               alignment: Alignment.bottomCenter,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
+              child: Image.asset('assets/txt_logo.png',
+              width: 120,
+              height: 80,
+              fit: BoxFit.fill),
             ),
             Positioned(
               left: 0,

@@ -1,48 +1,149 @@
 import 'package:flutter/material.dart';
+import './configuration_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logger/logger.dart';
 //import '../conexao_endpoints/usuarios.dart';
 import './home_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrcamentoScreen extends StatefulWidget {
   final String token;
   final Map<String, dynamic> respostaSimulacao;
-  const OrcamentoScreen({super.key, required this.token, required this.respostaSimulacao });
+
+  const OrcamentoScreen({
+    super.key,
+    required this.token,
+    required this.respostaSimulacao,
+  });
 
   @override
   State<OrcamentoScreen> createState() => _OrcamentoScreenState();
 }
 
 class _OrcamentoScreenState extends State<OrcamentoScreen> {
+  void chamarUberComOrigemEDestino() async {
+    final url = Uri.parse(
+      'uber://?client_id=1Sb8V21lmfeEAwcyuDjvsEN1VFdDnOvS&action=setPickup&pickup=my_location&dropoff[latitude]=-23.568392&dropoff[longitude]=-46.655536'
+    );
+
+    try {
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      await launchUrl(
+        Uri.parse('market://details?id=com.ubercab'),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
+
+  void chamar99ComOrigemEDestino() async {
+    final url = Uri.parse('ninety_nine://');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      await launchUrl(
+        Uri.parse('https://play.google.com/store/apps/details?id=com.taxis99'),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
   var logger = Logger();
+
   final Color backgroundColor = Color(0xFFCCDBFF);
   final Color cardColor = Color(0xFF223148);
   
   @override
   Widget build(BuildContext context) {
     logger.i(widget.respostaSimulacao);
-    final predictions = widget.respostaSimulacao['data'] as Map<String, dynamic>;
-    final entries = predictions.entries.toList()
-  ..sort((a, b) => ((a.value as num).toDouble()).compareTo((b.value as num).toDouble()));
-    final menorPreco = entries.map((e) => e.value).reduce((a, b) => a < b ? a : b);
+    final precos =  List<Map<String, dynamic>>.from(widget.respostaSimulacao['data']);
+    precos.sort((a, b) =>
+        (a['preco'] as num).compareTo(b['preco'] as num));
+    final menorPreco = precos.first['preco'];
+
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212), // fundo escuro, opcional
-      appBar: AppBar(title: Text("Corridas Simuladas")),
+      backgroundColor: backgroundColor,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: Container(
+          color: backgroundColor,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Botão de voltar
+              IconButton(
+                onPressed: () => irParaHome(),
+                icon: SvgPicture.asset('assets/grp_returner.svg'),
+              ),
+
+              // Logo centralizada
+              Expanded(
+                child: Center(
+                  child: Image.asset(
+                    'assets/txt_logo.png',
+                    width: 120,
+                    height: 80,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+
+              // Botão de configurações
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConfigurationScreen(token: widget.token),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset(
+                  'assets/img_configuracoes.svg',
+                  width: 36,
+                  height: 36,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+
+      // Lista de cards de preços
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        itemCount: entries.length,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        itemCount: precos.length,
         itemBuilder: (context, index) {
-          final entry = entries[index];
-          final preco = ((entry.value as num).toDouble()).toStringAsFixed(2);
-          final bool isRecomendado = entry.value == menorPreco;
+          final entry = precos[index];
+          final preco = ((entry['preco'] as num).toDouble()).toStringAsFixed(2);
+          final bool isRecomendado = entry['preco'] == menorPreco;
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
-            child: buildCard(
-              titulo: entry.key,
-              preco: "R\$ $preco",
-              recomendado: isRecomendado,
+            child: InkWell(
+              onTap: () {
+                if(entry['empresa'] == 'Uber'){
+                  chamarUberComOrigemEDestino();
+                }else{
+                  chamar99ComOrigemEDestino();
+                }
+              },
+              child: buildCard(
+                titulo: "${entry['empresa']} - ${entry['categoria']}",
+                preco: "R\$ $preco",
+                recomendado: isRecomendado,
+                screenWidth: screenWidth,
+              ),
             ),
           );
         },
@@ -50,73 +151,79 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
     );
   }
 
+  // Card com informações da corrida
   Widget buildCard({
     required String titulo,
     required String preco,
-    bool recomendado = false,
+    required bool recomendado,
+    required double screenWidth,
   }) {
     return Center(
       child: Container(
-        width: 328,
-        height: 121,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        width: screenWidth > 400 ? 350 : screenWidth * 0.9, // Responsivo
+        height: 130,
         decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF243B55), Color(0xFF3D648F)],
+          ),
         ),
-        child: Row(
+        child: Stack(
           children: [
-            // Ícone do carro
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Icon(Icons.directions_car, color: cardColor, size: 48),
-              ),
-            ),
-            SizedBox(width: 16),
-
-            // Informações de texto
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+            // Título + estrela
+            Positioned(
+              top: 16,
+              left: 16,
+              child: Row(
                 children: [
-                  if (recomendado)
-                    Text(
-                      'Recomendada',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
                   Text(
                     titulo,
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      color: Color(0XFFD9D9D9),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
                     ),
                   ),
+                  if (recomendado)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: SvgPicture.asset(
+                        'assets/estrela.svg',
+                        width: 18,
+                        height: 18,
+                      ),
+                    ),
                 ],
               ),
             ),
 
             // Preço
-            Text(
-              preco,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: Color(0XFFD9D9D9),
-                fontWeight: FontWeight.w400,
-                fontSize: 30,
+            Positioned(
+              left: 16,
+              bottom: 16,
+              child: Text(
+                preco,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+
+            // Imagem do carro
+            Positioned(
+              top: 5,
+              right: 14,
+              child: Image.asset(
+                titulo.toLowerCase().contains('uber')
+                    ? 'assets/carro_preto.png'
+                    : 'assets/carro_laranja.png',
+                width: 90,
+                height: 100,
+                fit: BoxFit.contain,
               ),
             ),
           ],
