@@ -88,17 +88,22 @@ class _TelaLoginState extends State<TelaLogin> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Image.asset('assets/txt_logo.png',
-              width: 120,
-              height: 80,
-              fit: BoxFit.fill),
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Image.asset(
+                  'assets/txt_logo.png',
+                  width: 105,
+                  height: 65,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
           ],
         ),
       ),
       body: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           width: 350,
           decoration: BoxDecoration(
             color: const Color(0xFFCCDBFF),

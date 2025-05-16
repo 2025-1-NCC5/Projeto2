@@ -25,11 +25,13 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   google_nav_bar: ^5.0.7
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
   assets:
     - assets/web/vinheta.gif
+    - assets/web/Logo-VUCA.gif
     - assets/web/vinheta.mp4
     - assets/txt_logo.png
     - assets/grp_returner.svg
@@ -63,3 +65,8 @@ flutter:
         - asset: assets/fonts/Poppins-Thin.ttf
         - asset: assets/fonts/Poppins-ThinItalic.ttf
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo-vuca.png"
+  min_sdk_android: 17
