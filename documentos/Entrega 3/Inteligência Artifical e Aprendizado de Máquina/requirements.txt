@@ -1,0 +1,7 @@
+Flask==2.3.2
+joblib
+requests
+pytz
+numpy
+pandas
+scikit-learn
