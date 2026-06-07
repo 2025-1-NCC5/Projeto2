@@ -7,7 +7,11 @@ import './home_screen.dart';
 class OrcamentoScreen extends StatefulWidget {
   final String token;
   final Map<String, dynamic> respostaSimulacao;
-  const OrcamentoScreen({super.key, required this.token, required this.respostaSimulacao });
+  const OrcamentoScreen({
+    super.key,
+    required this.token,
+    required this.respostaSimulacao,
+  });
 
   @override
   State<OrcamentoScreen> createState() => _OrcamentoScreenState();
@@ -17,14 +21,18 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
   var logger = Logger();
   final Color backgroundColor = Color(0xFFCCDBFF);
   final Color cardColor = Color(0xFF223148);
-  
+
   @override
   Widget build(BuildContext context) {
     logger.i(widget.respostaSimulacao);
-    final predictions = widget.respostaSimulacao['data'] as Map<String, dynamic>;
-    final entries = predictions.entries.toList()
-  ..sort((a, b) => (a.value as double).compareTo(b.value as double));
-    final menorPreco = entries.map((e) => e.value).reduce((a, b) => a < b ? a : b);
+    final predictions =
+        widget.respostaSimulacao['data'] as Map<String, dynamic>;
+    final entries =
+        predictions.entries.toList()
+          ..sort((a, b) => (a.value as double).compareTo(b.value as double));
+    final menorPreco = entries
+        .map((e) => e.value)
+        .reduce((a, b) => a < b ? a : b);
 
     return Scaffold(
       backgroundColor: const Color(0xFF121212), // fundo escuro, opcional
@@ -126,17 +134,17 @@ class _OrcamentoScreenState extends State<OrcamentoScreen> {
   }
 
   void irParaHome() async {
-      //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-      //if(response != null && response["sucesso"] == true){
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen(token : widget.token)),
-        );
-      //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-      //}
+    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
+    //if(response != null && response["sucesso"] == true){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen(token: widget.token)),
+    );
+    //}else{
+    //String errorMessage = response?['message'] ?? 'Something went wrong!';
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text('Request failed: ${errorMessage}')),
+    //);
+    //}
   }
 }

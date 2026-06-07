@@ -9,7 +9,6 @@ import './esquecue_senha.dart';
 import '../conexao_endpoints/usuarios.dart';
 //import 'package:logger/logger.dart';
 
-
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
 
@@ -36,19 +35,22 @@ class _TelaLoginState extends State<TelaLogin> {
   // }
 
   void login() async {
-      final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-      if(response != null && response["sucesso"] == true){
-        String token = response["token"];
-        Navigator.push(
+    final response = await Usuarios.fazerLogin(
+      emailController.text,
+      senhaController.text,
+    );
+    if (response != null && response["sucesso"] == true) {
+      String token = response["token"];
+      Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen(token:token)),
-        );
-      }else{
-        String errorMessage = response?['mensagem'] ?? 'Something went wrong!';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Request failed: ${errorMessage}')),
-        );
-      }
+        MaterialPageRoute(builder: (context) => HomeScreen(token: token)),
+      );
+    } else {
+      String errorMessage = response?['mensagem'] ?? 'Algo deu errado!';
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro: $errorMessage')));
+    }
   }
   // void teste() async {
   //     var logger = Logger();
@@ -79,18 +81,17 @@ class _TelaLoginState extends State<TelaLogin> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFCCDBFF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFCCDBFF),
-        title: Stack(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
-            ),
-          ],
+        backgroundColor: theme.scaffoldBackgroundColor,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: SvgPicture.asset('assets/txt_logo.svg'),
         ),
       ),
       body: Center(
@@ -98,16 +99,19 @@ class _TelaLoginState extends State<TelaLogin> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           width: 350,
           decoration: BoxDecoration(
-            color: const Color(0xFFCCDBFF),
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 "Faça login para continuar transformando ideias em realidade.",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Poppins', color: Color(0XFF121212),),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Poppins',
+                ),
               ),
               const SizedBox(height: 20),
               TextField(
@@ -118,7 +122,7 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
                   labelText: 'E-mail',
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: colorScheme.surface,
                 ),
               ),
               const SizedBox(height: 10),
@@ -131,11 +135,11 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
                   labelText: 'Senha',
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: colorScheme.surface,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _senhaVisivel ? Icons.visibility : Icons.visibility_off,
-                      color: Color(0xFF223148),
+                      color: theme.iconTheme.color,
                     ),
                     onPressed: () {
                       setState(() {
@@ -149,12 +153,24 @@ class _TelaLoginState extends State<TelaLogin> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => irParaEsqueceuSenha(),
-                  child: const Text("Esqueceu sua senha?", style: TextStyle(fontFamily: 'Poppins', fontSize: 12, fontWeight: FontWeight.w400, color: Color(0XFF262626)),),
+                  onPressed: irParaEsqueceuSenha,
+                  child: Text(
+                    "Esqueceu sua senha?",
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
-              const Text("OU", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, fontWeight: FontWeight.w400, color: Color(0XFF121212)),),
+              Text(
+                "OU",
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -177,24 +193,26 @@ class _TelaLoginState extends State<TelaLogin> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff223148),
-                      foregroundColor: Color(0XFFD9D9D9),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  onPressed: () => login(),
+                  onPressed: login,
                   child: const Text(
                     "Confirmar",
-                    style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
               TextButton(
-                onPressed: () => irParaCadastro(),
-                child: const Text("Não tem uma conta? Cadastrar", style: TextStyle(fontFamily: 'Poppins', fontSize: 12, fontWeight: FontWeight.w400, color: Color(0XFF262626)),),
+                onPressed: irParaCadastro,
+                child: Text(
+                  "Não tem uma conta? Cadastrar",
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
             ],
@@ -204,33 +222,17 @@ class _TelaLoginState extends State<TelaLogin> {
     );
   }
 
-  void irParaEsqueceuSenha() async {
-    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-    //if(response != null && response["sucesso"] == true){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TelaRecuperacaoSenha()),
-      );
-    //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-    //}
+  void irParaEsqueceuSenha() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TelaRecuperacaoSenha()),
+    );
   }
 
-  void irParaCadastro() async {
-    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-    //if(response != null && response["sucesso"] == true){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TelaCadastro()),
-      );
-    //}else{
-        //String errorMessage = response?['message'] ?? 'Something went wrong!';
-        //ScaffoldMessenger.of(context).showSnackBar(
-          //SnackBar(content: Text('Request failed: ${errorMessage}')),
-        //);
-    //}
+  void irParaCadastro() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TelaCadastro()),
+    );
   }
 }

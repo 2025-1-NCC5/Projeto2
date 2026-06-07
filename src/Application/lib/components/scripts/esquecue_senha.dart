@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../conexao_endpoints/usuarios.dart';
 import './login_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../themeprovider.dart';
 
 class TelaRecuperacaoSenha extends StatefulWidget {
   const TelaRecuperacaoSenha({super.key});
@@ -24,26 +26,28 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
       _showTokenPopup(context);
     } else {
       String errorMessage = response?['message'] ?? 'Something went wrong!';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Request failed: ${errorMessage}')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Request failed: $errorMessage')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyMedium?.color;
+
     return Scaffold(
-      backgroundColor: Color(0xFFCCDBFF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFCCDBFF),
-        title: Stack(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset('assets/txt_logo.svg'),
-            ),
-          ],
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: SvgPicture.asset(
+            'assets/txt_logo.svg',
+            color: theme.appBarTheme.titleTextStyle?.color ?? textColor,
+          ),
         ),
       ),
       body: Center(
@@ -52,14 +56,14 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 "Esqueceu sua senha? Sem problemas, podemos te ajudar a redefini-la. Informe seu e-mail.",
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   fontSize: 20,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
-                  color: Color(0XFF121212),
+                  color: textColor,
                 ),
               ),
               const SizedBox(height: 24),
@@ -71,9 +75,11 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: theme.cardColor,
                   labelText: 'E-mail',
+                  labelStyle: theme.textTheme.bodyMedium,
                 ),
+                style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 32),
               // Botões "Voltar" e "Enviar"
@@ -82,12 +88,12 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff223148),
-                      foregroundColor: Color(0XFFD9D9D9),
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
                       ),
@@ -97,34 +103,26 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                     },
                     child: const Text(
                       "Voltar",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins'),
                     ),
                   ),
                   const SizedBox(width: 32),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff223148),
-                      foregroundColor: Color(0XFFD9D9D9),
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
                       ),
                     ),
-                    onPressed: () {
-                      emailRecuperacao();
-                    },
+                    onPressed: emailRecuperacao,
                     child: const Text(
                       "Enviar",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins'),
                     ),
                   ),
                 ],
@@ -138,64 +136,52 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
 
   void _showTokenPopup(BuildContext context) {
     final tokenController = TextEditingController();
+    final theme = Theme.of(context);
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFCCDBFF),
+          backgroundColor: theme.scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Text(
-            'Confirme seu Token',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-              color: Color(0xFF121212),
-            ),
-          ),
+          title: Text('Confirme seu Token', style: theme.textTheme.bodyMedium),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Enviamos um token para seu e-mail. Insira abaixo para continuar:',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Color(0xFF262626),
-                ),
+                style: theme.textTheme.bodyMedium,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: tokenController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Digite o token',
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: theme.cardColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                style: theme.textTheme.bodyMedium,
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Fecha o popup se cancelar
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'Cancelar',
-                style: TextStyle(color: Color(0xFF223148)),
+                style: TextStyle(color: theme.colorScheme.primary),
               ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF223148),
+                backgroundColor: theme.colorScheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -204,9 +190,7 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                 final response = await http.post(
                   Uri.parse('https://seu-backend.com/validar-token'),
                   headers: {'Content-Type': 'application/json'},
-                  body: jsonEncode({
-                    'token': tokenController.text, // Apenas o token
-                  }),
+                  body: jsonEncode({'token': tokenController.text}),
                 );
 
                 if (response.statusCode == 200 &&
@@ -222,7 +206,10 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                   );
                 }
               },
-              child: Text('Confirmar', style: TextStyle(color: Colors.white)),
+              child: const Text(
+                'Confirmar',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );
@@ -232,8 +219,9 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
 
   // Popup colocar senha nova
   void _showChangePasswordPopup(BuildContext context) {
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController confirmPasswordController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    final theme = Theme.of(context);
 
     bool obscurePassword = true;
     bool obscureConfirmPassword = true;
@@ -244,15 +232,8 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: Color(0XFFCCDBFF), // Cor de fundo do popup
-              title: Text(
-                "Alterar Senha",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF121212),
-                ),
-              ),
+              backgroundColor: theme.scaffoldBackgroundColor,
+              title: Text("Alterar Senha", style: theme.textTheme.bodyMedium),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -262,104 +243,85 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                     obscureText: obscurePassword,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: theme.cardColor,
                       labelText: "Nova Senha",
-                      labelStyle: TextStyle(
-                        color: Color(0xFFA3A3A3),
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
+                      labelStyle: theme.textTheme.bodyMedium,
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF515151)),
+                        borderSide: BorderSide(color: theme.dividerColor),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           obscurePassword
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          color: Color(0xFF223148),
+                          color: theme.colorScheme.primary,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            obscurePassword = !obscurePassword;
-                          });
-                        },
+                        onPressed:
+                            () => setState(
+                              () => obscurePassword = !obscurePassword,
+                            ),
                       ),
                     ),
-                    style: TextStyle(color: Color(0XFF121212)),
+                    style: theme.textTheme.bodyMedium,
                   ),
-                  SizedBox(height: 12),
-
-                  // Campo Confirme a Senha
+                  const SizedBox(height: 12),
                   TextField(
                     controller: confirmPasswordController,
                     obscureText: obscureConfirmPassword,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: theme.cardColor,
                       labelText: "Confirme a Senha",
-                      labelStyle: TextStyle(
-                        color: Color(0xFFA3A3A3),
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
+                      labelStyle: theme.textTheme.bodyMedium,
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF515151)),
+                        borderSide: BorderSide(color: theme.dividerColor),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           obscureConfirmPassword
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          color: Color(0xFF223148),
+                          color: theme.colorScheme.primary,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            obscureConfirmPassword = !obscureConfirmPassword;
-                          });
-                        },
+                        onPressed:
+                            () => setState(
+                              () =>
+                                  obscureConfirmPassword =
+                                      !obscureConfirmPassword,
+                            ),
                       ),
                     ),
-                    style: TextStyle(color: Color(0XFF121212)),
+                    style: theme.textTheme.bodyMedium,
                   ),
-                  SizedBox(height: 20),
-
-                  // Botões Cancelar e Salvar
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // Botão Cancelar
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context); // Fecha o popup
-                        },
+                        onPressed: () => Navigator.pop(context),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff223148),
-                          foregroundColor: Color(0XFFD9D9D9),
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 12,
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Cancelar",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: TextStyle(fontFamily: 'Poppins'),
                         ),
                       ),
-
-                      // Botão Salvar
                       ElevatedButton(
                         onPressed: () async {
                           if (passwordController.text.isEmpty ||
                               confirmPasswordController.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text(
                                   "Os campos não podem estar vazios!",
                                 ),
@@ -368,7 +330,7 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                           } else if (passwordController.text !=
                               confirmPasswordController.text) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text("As senhas não coincidem!"),
                               ),
                             );
@@ -376,38 +338,35 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
                             // Fechar popup e salvar senha
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text("Senha alterada com sucesso!"),
                               ),
                             );
-
-                            await Future.delayed(Duration(milliseconds: 300));
-
+                            await Future.delayed(
+                              const Duration(milliseconds: 300),
+                            );
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => TelaLogin(),
+                                builder: (context) => const TelaLogin(),
                               ),
                             );
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0XFF223148),
-                          foregroundColor: Color(0XFFD9D9D9),
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 24,
                             vertical: 12,
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Salvar",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: TextStyle(fontFamily: 'Poppins'),
                         ),
                       ),
                     ],
@@ -421,12 +380,10 @@ class _TelaRecuperacaoSenhaState extends State<TelaRecuperacaoSenha> {
     );
   }
 
-  void irParaLogin() async {
-    //final response = await Usuarios.fazerLogin(emailController.text, senhaController.text);
-    //if(response != null && response["sucesso"] == true){
+  void irParaLogin() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TelaLogin()),
+      MaterialPageRoute(builder: (context) => const TelaLogin()),
     );
     //}else{
     //String errorMessage = response?['message'] ?? 'Something went wrong!';
